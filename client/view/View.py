@@ -1,0 +1,44 @@
+class View():
+    def mostrar_menu_principal(self):
+        print("\n--- MENU PRINCIPAL ---")
+        print("[1] Login")
+        print("[2] Cadastre-se")
+        print("[3] Sair")
+        return input("Selecione uma opção: \n")
+
+    def solicitar_email_senha(self):
+        email = input("Informe seu email: \n")
+        password = input("Informe sua senha: \n")
+        return email, password
+
+    def mostrar_mensagem(self, mensagem):
+        print(mensagem)
+
+    def mostrar_voos(self, voos):
+        for voo in voos:
+            print(f'ID: {voo.id}')
+            print(f'Origem: {voo.origem}')
+            print(f'Destino: {voo.destino}')
+            print(f'Vagas disponíveis: {voo.vagas}')
+            print("-" * 40)
+
+    def solicitar_origem_destino(self, all_trechos):
+        for num, capital in enumerate(all_trechos):
+            print(f"[{num}] - {capital}")
+        origem = input("Digite de onde você quer partir: \n")
+        
+        for num in range(len(all_trechos[origem])):
+            print(f'[{num}] - {all_trechos[origem][num].destino}')
+        destino = input("Digite para onde você quer ir: \n")
+        
+        return origem, destino
+
+    def solicitar_id_voo(self):
+        return input('Selecione o ID do voo: \n')
+
+    def solicitar_assento_e_cpf(self, voo):
+        for num, assetos in enumerate(voo.vagas.keys()):
+            print(f'[{num}] - {assetos}')
+        escolha_assento = input('Escolha o assento: ')
+        cpf = input('Digite seu cpf: ')
+        return escolha_assento, cpf

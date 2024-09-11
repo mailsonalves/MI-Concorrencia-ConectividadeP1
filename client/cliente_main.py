@@ -1,4 +1,4 @@
-from cliente import Cliente
+from controller.Controller import Cliente
 
 HOST = '127.0.0.1'  
 PORT = 65432   
