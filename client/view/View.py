@@ -7,7 +7,7 @@ class View():
         return input("Selecione uma opção: \n")
 
     def solicitar_email_senha(self):
-        email = input("Informe seu email: \n")
+        email = input("Informe seu username: \n")
         password = input("Informe sua senha: \n")
         return email, password
 
@@ -16,11 +16,14 @@ class View():
 
     def mostrar_voos(self, voos):
         for voo in voos:
-            print(f'ID: {voo.id}')
-            print(f'Origem: {voo.origem}')
-            print(f'Destino: {voo.destino}')
-            print(f'Vagas disponíveis: {voo.vagas}')
-            print("-" * 40)
+            if voo.disponibilidade == True:
+                print(f'ID: {voo.id}')
+                print(f'Origem: {voo.origem}')
+                print(f'Destino: {voo.destino}')
+                print(f'Vagas disponíveis:')
+                for  assetos,disponibilidade in voo.vagas.items():
+                    print(f'[{"Dispnivel" if disponibilidade == False else "Ocupado"}] - {assetos}')
+            print("-" * 50)
 
     def solicitar_origem_destino(self, all_trechos):
         for num, capital in enumerate(all_trechos):
@@ -30,15 +33,19 @@ class View():
         for num in range(len(all_trechos[origem])):
             print(f'[{num}] - {all_trechos[origem][num].destino}')
         destino = input("Digite para onde você quer ir: \n")
-        
+        print("-" * 50)
         return origem, destino
 
     def solicitar_id_voo(self):
-        return input('Selecione o ID do voo: \n')
+        id = input('Selecione o ID do voo: \n')
+        print("-" * 50)
+        return id
+    
 
     def solicitar_assento_e_cpf(self, voo):
         for num, assetos in enumerate(voo.vagas.keys()):
             print(f'[{num}] - {assetos}')
         escolha_assento = input('Escolha o assento: ')
         cpf = input('Digite seu cpf: ')
+        print("-" * 50)
         return escolha_assento, cpf

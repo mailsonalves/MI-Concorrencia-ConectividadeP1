@@ -3,7 +3,8 @@ import pickle
 from model.User import User
 from view.View import View
 
-class Cliente():
+
+class Cliente:
     def __init__(self, port, host) -> None:
         self._port = port
         self._host = host
@@ -32,7 +33,9 @@ class Cliente():
     def _cadastro(self):
         while True:
             email, password = self.view.solicitar_email_senha()
-            new_user = self.__request(101, {'username': email, 'password_user': password})
+            new_user = self.__request(
+                101, {"username": email, "password_user": password}
+            )
             if new_user:
                 self.view.mostrar_mensagem("Usuário cadastrado.")
                 break
@@ -41,13 +44,15 @@ class Cliente():
 
     def _login(self):
         email, password = self.view.solicitar_email_senha()
-        user = self.__request(100, {'username': email, 'password_user': password})
-        
+        user = self.__request(100, {"username": email, "password_user": password})
+
         if user:
             self.view.mostrar_mensagem(f"Bem-vindo, {user.username}!\n")
             return user
         else:
-            self.view.mostrar_mensagem("Login falhou. Verifique suas credenciais e tente novamente.")
+            self.view.mostrar_mensagem(
+                "Login falhou. Verifique suas credenciais e tente novamente."
+            )
             return False
 
     def _selecionar_voo(self, user: User):
@@ -63,8 +68,10 @@ class Cliente():
             if voo.id == id_voo_selecionado:
                 escolha_assento, cpf = self.view.solicitar_assento_e_cpf(voo)
                 passagem = user.comprar_passagem(voo, escolha_assento, cpf)
-                if passagem and passagem != 'Ocupado':
-                    self.view.mostrar_mensagem(f"Compra confirmada:\nID do Voo: {passagem.id_voo}\nID do Passageiro: {passagem.id_passageiro}\nCPF: {passagem.cpf}\nAssento: {passagem.assento}")
+                if passagem and passagem != "Ocupado":
+                    self.view.mostrar_mensagem(
+                        f"Compra confirmada:\nID do Voo: {passagem.id_voo}\nID do Passageiro: {passagem.id_passageiro}\nCPF: {passagem.cpf}\nAssento: {passagem.assento}"
+                    )
                     self.__request(202, passagem)
                 elif passagem == "Ocupado":
                     self.view.mostrar_mensagem("Assento indisponível")
@@ -76,18 +83,21 @@ class Cliente():
         while True:
             opcao = self.view.mostrar_menu_principal()
 
-            if opcao == '1':
+            if opcao == "1":
                 user = self._login()
                 if user:
-                    self.view.mostrar_mensagem("[1] Comprar Passagem\n[2] Consultar Passagem")
-                    opcao = input("Selecione uma opção: \n")
-                    if opcao == '1':
-                        self._selecionar_voo(user)
+                    while True:
+                        self.view.mostrar_mensagem(
+                            "[1] Comprar Passagem\n[2] Consultar Passagem"
+                        )
+                        opcao = input("Selecione uma opção: \n")
+                        if opcao == "1":
+                            self._selecionar_voo(user)
 
-            elif opcao == '2':
+            elif opcao == "2":
                 self._cadastro()
 
-            elif opcao == '3':
+            elif opcao == "3":
                 self.view.mostrar_mensagem("Encerrando conexão...")
                 self._s.close()
                 break

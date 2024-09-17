@@ -2,7 +2,10 @@ import socket
 import threading
 import pickle
 import json
-
+import concurrent.futures
+from model.Passagem import Passagem
+from model.Voo import Voo
+from model.User import User
 
 voos = {}
 passagem = {}
@@ -23,20 +26,43 @@ users = {
     
 }
 
-def main():
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind(('localhost', 65432))
-    server.listen()
-    print(f"Servidor ouvindo em {"local host"}:{65432}")
-    try:
-            while True:
-                conn, client = server.accept() 
-                thread = threading.Thread(target=service, args=(conn,client))
-                thread.start()
-    except Exception as e:
+class Servidor():
+    def __init__(self, port, host) -> None:
+        self._port = port
+        self._host = host
+        self.__allclients = {}
+        self._s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        for capital_origem, destinos in capitais_brasil.items():
+            voo_array_temp = []  
+            for capital_destino in destinos:
+                New_voo = Voo(capital_origem, capital_destino)  
+                voo_array_temp.append(New_voo)  
+            voos[capital_origem] = voo_array_temp
+        for number in range(1,10):
+            username: str = 'admin'
+            password: str = 'password'
+            New_user: User = User(password, username)
+            users[New_user.id_user] = New_user
+            users[New_user.id_user].username = users[New_user.id_user].username + str(number)
+            users[New_user.id_user].password = users[New_user.id_user].password + str(number)
+
+        
+    def start_server(self):
+        self._s.bind((self._host, self._port))
+        self._s.listen()
+        print(f"Servidor ouvindo em {self._host}:{self._port}")
+        try:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor: #Limita a quantiadade de thread
+                while True:
+                    conn, client = self._s.accept() 
+                    executor.submit(self._service, conn, client)
+           
+
+        except Exception as e:
             print(f"Ocorreu um erro ao inicializar o serivdor {e}")
 
-    def service(self,conn, cliente):
+                
+    def _service(self,conn, cliente):
         with conn:
             print(f"Conectado por {cliente}")
             while True:
@@ -60,15 +86,24 @@ def main():
                                 else:
                                     conn.sendall(pickle.dumps(False))
                                     
+                            elif action_code == 101:
+                                for user in users.values():  
+                                    if user_info.get('username') == user.username:
+                                        conn.sendall(pickle.dumps(False))
+                                    else:
+                                        new_user = User(user_info.get('username'), user_info.get('password'))
+                                        users[new_user.id_user] = new_user
+                                        conn.sendall(pickle.dumps(True))
+                                    
                             elif action_code == 201:  
                                 conn.sendall(pickle.dumps(voos))
                             
                             elif action_code == 202:
-                                users[user_info.id_passageiro].passagens.append(user_info)
                                 for voo in voos.values():
                                     for num in range(len(voo)):
                                         if voo[num].id == user_info.id_voo:
                                             if (voo[num].vagas[user_info.assento] != True):
+                                                users[user_info.id_passageiro].passagens.append(user_info)
                                                 voo[num].vagas[user_info.assento] = True
                                                 print('compra realizada')
                                             else:
@@ -86,3 +121,4 @@ def main():
                     
                     del self.__allclients[cliente]
                     break
+                    
