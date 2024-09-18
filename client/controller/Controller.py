@@ -78,6 +78,12 @@ class Cliente:
                 else:
                     self.view.mostrar_mensagem("Voo lotado")
                 return
+    
+    def _imprimir_passagens_user(self, user):
+        all_trechos = self.__request(201, "")
+        self.view.imprimir_passagem( user.passagens, all_trechos)
+        
+        
 
     def _menu(self):
         while True:
@@ -93,6 +99,9 @@ class Cliente:
                         opcao = input("Selecione uma opção: \n")
                         if opcao == "1":
                             self._selecionar_voo(user)
+                        elif(opcao == "2"):
+                            self._imprimir_passagens_user(user)
+                            
 
             elif opcao == "2":
                 self._cadastro()
