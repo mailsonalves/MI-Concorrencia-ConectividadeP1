@@ -33,9 +33,9 @@ class Cliente:
 
     def _cadastro(self):
         while True:
-            email, password = self.view.solicitar_email_senha()
+            username, password = self.view.solicitar_username_senha()
             new_user = self.__request(
-                101, {"username": email, "password_user": password}
+                101, {"username": username, "password_user": password}
             )
             if new_user:
                 self.view.mostrar_mensagem("Usuário cadastrado.")
@@ -44,8 +44,8 @@ class Cliente:
                 self.view.mostrar_mensagem("Usuário já existe!")
 
     def _login(self):
-        email, password = self.view.solicitar_email_senha()
-        response = self.__request(100, {"username": email, "password_user": password})
+        username, password = self.view.solicitar_username_senha()
+        response = self.__request(100, {"username": username, "password_user": password})
         user  = response.get('user')
 
         if response:
