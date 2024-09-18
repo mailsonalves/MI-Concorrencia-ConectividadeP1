@@ -2,8 +2,9 @@ import socket
 import pickle
 from model.User import User
 from view.View import View
+import threading
 
-
+lock = threading.Lock()
 class Cliente:
     def __init__(self, port, host) -> None:
         self._port = port
@@ -73,16 +74,18 @@ class Cliente:
                         f"Compra confirmada:\nID do Voo: {passagem.id_voo}\nID do Passageiro: {passagem.id_passageiro}\nCPF: {passagem.cpf}\nAssento: {passagem.assento}"
                     )
                     self.__request(202, passagem)
+                    return
                 elif passagem == "Ocupado":
                     self.view.mostrar_mensagem("Assento indisponível")
+                    return
                 else:
                     self.view.mostrar_mensagem("Voo lotado")
-                return
+                    return
+                
     
     def _imprimir_passagens_user(self, user):
         all_trechos = self.__request(201, "")
         self.view.imprimir_passagem( user.passagens, all_trechos)
-        
         
 
     def _menu(self):

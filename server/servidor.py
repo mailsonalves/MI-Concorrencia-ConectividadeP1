@@ -7,6 +7,7 @@ from model.Passagem import Passagem
 from model.Voo import Voo
 from model.User import User
 
+lock = threading.Lock()
 voos = {}
 passagem = {}
 
@@ -91,23 +92,29 @@ class Servidor():
                                     if user_info.get('username') == user.username:
                                         conn.sendall(pickle.dumps(False))
                                     else:
-                                        new_user = User(user_info.get('username'), user_info.get('password'))
-                                        users[new_user.id_user] = new_user
-                                        conn.sendall(pickle.dumps(True))
+                                        with lock:
+                                            new_user = User(user_info.get('username'), user_info.get('password'))
+                                            users[new_user.id_user] = new_user
+                                            conn.sendall(pickle.dumps(True))
                                     
                             elif action_code == 201:  
                                 conn.sendall(pickle.dumps(voos))
                             
                             elif action_code == 202:
-                                for voo in voos.values():
-                                    for num in range(len(voo)):
-                                        if voo[num].id == user_info.id_voo:
-                                            if (voo[num].vagas[user_info.assento] != True):
-                                                users[user_info.id_passageiro].passagens.append(user_info)
-                                                voo[num].vagas[user_info.assento] = True
-                                                print('compra realizada')
-                                            else:
-                                                print('assento ocupado')
+                                with lock:
+                                    for voo in voos.values():
+                                        for num in range(len(voo)):
+                                            if voo[num].id == user_info.id_voo:
+                                                if (voo[num].vagas[user_info.assento] != True):
+                                                    users[user_info.id_passageiro].passagens.append(user_info)
+                                                    voo[num].vagas[user_info.assento] = True
+                                                    conn.sendall(pickle.dumps(True))
+                                                    print(f'Compra realizada, Cliente -> [{self._host}] :[{self._port}]')
+                                                    break
+                                                else:
+                                                    conn.sendall(pickle.dumps(False))
+                                                    print('assento ocupado')
+                                                    break
 
                                         
                                 
@@ -118,7 +125,6 @@ class Servidor():
                         print("Recebido um tipo inesperado de dado.")
                 except ConnectionResetError:
                     print(f"Erro de conexão com {cliente}: A conexão foi resetada.")
-                    
-                    del self.__allclients[cliente]
+
                     break
                     
