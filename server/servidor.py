@@ -2,6 +2,7 @@ import socket
 import threading
 import pickle
 import json
+import secrets
 import concurrent.futures
 from model.Passagem import Passagem
 from model.Voo import Voo
@@ -26,6 +27,8 @@ capitais_brasil = {
 users = {
     
 }
+
+sessions_activate = {}
 
 class Servidor():
     def __init__(self, port, host) -> None:
@@ -82,10 +85,19 @@ class Servidor():
                                 password_user = user_info.get('password_user')
                                 for user in users.values():
                                     if user.username == username and user.password == password_user:
-                                        conn.sendall(pickle.dumps(user))
+                                        session_token = secrets.token_hex(16)
+                                        sessions_activate[session_token] = user.id_user
+                                        conn.sendall(pickle.dumps({'token': session_token, 'user': user}))
                                         break
                                 else:
+                                    
                                     conn.sendall(pickle.dumps(False))
+                            
+                            elif action_code == 102:
+                                token = user_info
+                                user = users[sessions_activate[token]]
+                                conn.sendall(pickle.dumps(user))
+                                
                                     
                             elif action_code == 101:
                                 for user in users.values():  
