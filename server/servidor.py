@@ -24,6 +24,8 @@ capitais_brasil = {
     "Fortaleza": ["Salvador", "Recife", "Brasília"],
 
 }
+nomes = ["Alice", "Bruno", "Carla", "Daniel", "Eduarda", "Fernando", "Gabriela", "Henrique", "Isabela", "João"]
+
 users = {
     
 }
@@ -49,6 +51,7 @@ class Servidor():
             users[New_user.id_user] = New_user
             users[New_user.id_user].username = users[New_user.id_user].username + str(number)
             users[New_user.id_user].password = users[New_user.id_user].password + str(number)
+            users[New_user.id_user].name = nomes[number]
 
         
     def start_server(self):

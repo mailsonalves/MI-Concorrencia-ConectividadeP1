@@ -49,7 +49,7 @@ class Cliente:
         user  = response.get('user')
 
         if response:
-            self.view.mostrar_mensagem(f"Bem-vindo, {user.username}!\n")
+            self.view.mostrar_mensagem(f"\nBem-vindo, {user.name}!\n")
             return response
         else:
             self.view.mostrar_mensagem(
@@ -100,7 +100,7 @@ class Cliente:
                 if user:
                     while True:
                         self.view.mostrar_mensagem(
-                            "[1] Comprar Passagem\n[2] Consultar Passagem"
+                            "[1] Comprar Passagem\n[2] Consultar Passagem\n[3] Voltar ao Menu"
                         )
                         opcao = input("Selecione uma opção: \n")
                         if opcao == "1":
@@ -108,6 +108,8 @@ class Cliente:
                         elif(opcao == "2"):
                             user = self.__request(102, token)
                             self._imprimir_passagens_user(user)
+                        elif(opcao == "3"):
+                            break
                             
 
             elif opcao == "2":
