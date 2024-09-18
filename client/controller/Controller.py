@@ -45,11 +45,12 @@ class Cliente:
 
     def _login(self):
         email, password = self.view.solicitar_email_senha()
-        user = self.__request(100, {"username": email, "password_user": password})
+        response = self.__request(100, {"username": email, "password_user": password})
+        user  = response.get('user')
 
-        if user:
+        if response:
             self.view.mostrar_mensagem(f"Bem-vindo, {user.username}!\n")
-            return user
+            return response
         else:
             self.view.mostrar_mensagem(
                 "Login falhou. Verifique suas credenciais e tente novamente."
@@ -93,7 +94,9 @@ class Cliente:
             opcao = self.view.mostrar_menu_principal()
 
             if opcao == "1":
-                user = self._login()
+                response = self._login()
+                user  = response.get("user")
+                token = response.get("token")
                 if user:
                     while True:
                         self.view.mostrar_mensagem(
@@ -103,6 +106,7 @@ class Cliente:
                         if opcao == "1":
                             self._selecionar_voo(user)
                         elif(opcao == "2"):
+                            user = self.__request(102, token)
                             self._imprimir_passagens_user(user)
                             
 
