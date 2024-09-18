@@ -51,12 +51,11 @@ class View():
         return escolha_assento, cpf
 
     def imprimir_passagem(self, passagens_de_voos: list, voos: dict):
-        print()
         for passagem in passagens_de_voos:
             for voo in voos.values():
-                
                 for voo_user in voo:
                     if voo_user.id == passagem.id_voo:
+                        print(f'ID: {passagem.id_voo}')
                         print(f'CPF: {passagem.cpf}')
                         print(f'Origem: {voo_user.origem}')
                         print(f'Destino: {voo_user.destino}')
