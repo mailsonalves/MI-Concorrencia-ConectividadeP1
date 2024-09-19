@@ -9,7 +9,6 @@ from seed import gerar_user, gerar_voos
 
 lock = threading.Lock()
 voos = {}
-passagem = {}
 users = {}
 sessions_activate = {}
 
