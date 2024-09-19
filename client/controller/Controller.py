@@ -5,6 +5,8 @@ from view.View import View
 import threading
 
 lock = threading.Lock()
+
+
 class Cliente:
     def __init__(self, port, host) -> None:
         self._port = port
@@ -45,8 +47,10 @@ class Cliente:
 
     def _login(self):
         username, password = self.view.solicitar_username_senha()
-        response = self.__request(100, {"username": username, "password_user": password})
-        user  = response.get('user')
+        response = self.__request(
+            100, {"username": username, "password_user": password}
+        )
+        user = response.get("user")
 
         if response:
             self.view.mostrar_mensagem(f"\nBem-vindo, {user.name}!\n")
@@ -82,12 +86,10 @@ class Cliente:
                 else:
                     self.view.mostrar_mensagem("Voo lotado")
                     return
-                
-    
+
     def _imprimir_passagens_user(self, user):
         all_trechos = self.__request(201, "")
-        self.view.imprimir_passagem( user.passagens, all_trechos)
-        
+        self.view.imprimir_passagem(user.passagens, all_trechos)
 
     def _menu(self):
         while True:
@@ -95,7 +97,7 @@ class Cliente:
 
             if opcao == "1":
                 response = self._login()
-                user  = response.get("user")
+                user = response.get("user")
                 token = response.get("token")
                 if user:
                     while True:
@@ -105,12 +107,11 @@ class Cliente:
                         opcao = input("Selecione uma opção: \n")
                         if opcao == "1":
                             self._selecionar_voo(user)
-                        elif(opcao == "2"):
+                        elif opcao == "2":
                             user = self.__request(102, token)
                             self._imprimir_passagens_user(user)
-                        elif(opcao == "3"):
+                        elif opcao == "3":
                             break
-                            
 
             elif opcao == "2":
                 self._cadastro()
