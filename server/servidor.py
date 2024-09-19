@@ -117,9 +117,11 @@ class Servidor:
                                     Retorna o objeto do usuário associado ao token.
                                 """
                                 token = user_info
-                                user = users[sessions_activate[token]]
-                                conn.sendall(pickle.dumps(user))
-
+                                if token in sessions_activate.keys():
+                                    user = users[sessions_activate[token]]
+                                    conn.sendall(pickle.dumps(user))
+                                else:
+                                    conn.sendall(pickle.dumps(False))
                             elif action_code == 101:
                                 """
                                 Registra um novo usuário no sistema.
