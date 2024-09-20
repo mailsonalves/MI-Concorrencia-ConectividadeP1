@@ -122,6 +122,14 @@ class Servidor:
                                     conn.sendall(pickle.dumps(user))
                                 else:
                                     conn.sendall(pickle.dumps(False))
+                            elif action_code == 103:
+                                token = user_info
+                                if token in sessions_activate.keys():
+                                    del sessions_activate[token]
+                                    conn.sendall(pickle.dumps(user))
+                                    conn.close()
+
+                                
                             elif action_code == 101:
                                 """
                                 Registra um novo usuário no sistema.
@@ -197,3 +205,4 @@ class Servidor:
                 except ConnectionResetError:
                     print(f"Erro de conexão com {cliente}: A conexão foi resetada.")
                     break
+    
