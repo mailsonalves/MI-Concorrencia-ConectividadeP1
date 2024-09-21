@@ -5,7 +5,6 @@ from view.Menu import open_menu
 ctk.set_appearance_mode("System")  # Modos: "System", "Dark", "Light"
 ctk.set_default_color_theme("blue")  # Temas: "blue", "green", "dark-blue"
 
-cliente_new = ''
 # Função de login
 def login():
     from cliente_main import client

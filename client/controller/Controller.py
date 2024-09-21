@@ -149,7 +149,7 @@ class Cliente:
             
             return False
 
-    def _selecionar_voo(self, user: User):
+    def selecionar_voo(self, origem, destino):
         """
         Permite que o usuário selecione um voo disponível.
 
@@ -163,11 +163,14 @@ class Cliente:
         None
         """
         all_trechos = self.__request(201, "")
-        origem, destino = self.view.solicitar_origem_destino(all_trechos)
-
-        self.view.mostrar_voos(all_trechos[origem])
-        id_voo = self.view.solicitar_id_voo()
-        self._confirmar_compra(user, all_trechos[origem], id_voo)
+        for voo in all_trechos[origem]:
+            if voo.destino == destino:
+                return voo
+        else:
+            return False
+        #self.view.mostrar_voos(all_trechos[origem])
+        #id_voo = self.view.solicitar_id_voo()
+        #self._confirmar_compra(user, all_trechos[origem], id_voo)
 
     def _confirmar_compra(self, user, voos, id_voo_selecionado):
         """
