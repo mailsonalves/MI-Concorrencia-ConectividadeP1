@@ -1,10 +1,12 @@
 # menu_functions.py
 import customtkinter as ctk
-from Escolha import exibir_listagem_voos
+from view.Escolha import exibir_listagem_voos
+
 app_global = ''
-def open_menu(app):
+def open_menu(app, auth):
     global app_global
     app_global = app
+    user = auth.get("user")
     # Limpa a tela atual antes de exibir o menu
     for widget in app.winfo_children():
         widget.destroy()
@@ -14,7 +16,7 @@ def open_menu(app):
     frame.pack(expand=True)
 
     # Título do menu
-    label_title = ctk.CTkLabel(frame, text="Bem-vindo, user ", font=("Arial", 20))
+    label_title = ctk.CTkLabel(frame, text=f"Bem-vindo, {user.name} ", font=("Arial", 20))
     label_title.pack(pady=20)
 
     # Botão "Comprar Passagem"

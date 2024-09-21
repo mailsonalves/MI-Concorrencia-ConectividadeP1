@@ -1,24 +1,27 @@
 import customtkinter as ctk 
-from Menu import open_menu  # Importa o módulo do menu
+from view.Menu import open_menu
 
 # Configurando o tema e a aparência
 ctk.set_appearance_mode("System")  # Modos: "System", "Dark", "Light"
 ctk.set_default_color_theme("blue")  # Temas: "blue", "green", "dark-blue"
 
+cliente_new = ''
 # Função de login
 def login():
+    from cliente_main import client
     username = entry_username.get()
     password = entry_password.get()
-
+    auth = client.authenticate(username,password)
     # Lógica de autenticação simples (pode ser adaptada para validação real)
-    if username == "admin" and password == "1234":
+    if auth != False:
         label_result.configure(text="Login bem-sucedido!", text_color="green")
-        open_menu(app)  # Chama a função para abrir o dashboard
+        open_menu(app,auth)  # Chama a função para abrir o dashboard
     else:
         label_result.configure(text="Usuário ou senha incorretos", text_color="red")
 
 # Função para exibir a tela de login
 def open_login_screen():
+ 
     # Limpa a tela atual
     for widget in app.winfo_children():
         widget.destroy()
