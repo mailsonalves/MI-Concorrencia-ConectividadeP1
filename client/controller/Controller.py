@@ -65,14 +65,16 @@ class Cliente:
         self._port = port
         self._host = host
         self._s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.view = View()
+        #self.view = View()
 
     def start_client(self):
+        from view.Login import open_login_screen
+
         """
         Inicia a conexão com o servidor e exibe o menu principal.
         """
         self._s.connect((self._host, self._port))
-        self._menu()
+        open_login_screen()
 
     def __request(self, typeOperation, data):
         """
@@ -122,8 +124,8 @@ class Cliente:
                 break
             else:
                 self.view.mostrar_mensagem("Usuário já existe!")
-
-    def _login(self):
+   
+    def authenticate(self,username,password):
         """
         Solicita ao usuário suas credenciais e realiza o login.
 
@@ -132,19 +134,19 @@ class Cliente:
         Union[dict, bool]
             Retorna os dados do usuário e token em caso de sucesso, ou False em caso de falha.
         """
-        username, password = self.view.solicitar_username_senha()
+        #username, password = self.view.solicitar_username_senha()
         response = self.__request(
             100, {"username": username, "password_user": password}
         )
-        user = response.get("user")
 
-        if response:
-            self.view.mostrar_mensagem(f"\nBem-vindo, {user.name}!\n")
+        if response != False:
+            user = response.get("user")
+            print(f"\nBem-vindo, {user.name}!\n")
             return response
         else:
-            self.view.mostrar_mensagem(
-                "Login falhou. Verifique suas credenciais e tente novamente."
-            )
+            
+            print("Login falhou. Verifique suas credenciais e tente novamente.")
+            
             return False
 
     def _selecionar_voo(self, user: User):
@@ -229,7 +231,7 @@ class Cliente:
             opcao = self.view.mostrar_menu_principal()
             token_user = 0
             if opcao == "1":
-                response = self._login()
+                response = self.authenticate()
                 user = response.get("user")
                 token = response.get("token")
                 token_user = token
