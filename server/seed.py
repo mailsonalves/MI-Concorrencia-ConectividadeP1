@@ -1,5 +1,6 @@
 from model.Voo import Voo
 from model.User import User
+import random
 
 capitais_brasil = {
     "Brasília": ["São Paulo", "Rio de Janeiro", "Salvador", "Belo Horizonte", "Curitiba"],
@@ -14,6 +15,7 @@ capitais_brasil = {
 
 }
 nomes = ["Alice", "Bruno", "Carla", "Daniel", "Eduarda", "Fernando", "Gabriela", "Henrique", "Isabela", "João"]
+precos = [100, 150, 200, 250, 300]  # Lista de preços ou valores
 
 def gerar_voos(voos):
     for capital_origem, destinos in capitais_brasil.items():
@@ -32,3 +34,6 @@ def gerar_user(users):
             users[New_user.id_user].username = users[New_user.id_user].username + str(number)
             users[New_user.id_user].password = users[New_user.id_user].password + str(number)
             users[New_user.id_user].name = nomes[number]
+            number_random = random.randint(0, len(precos) - 1)  
+            users[New_user.id_user].preco = precos[number_random]
+            
