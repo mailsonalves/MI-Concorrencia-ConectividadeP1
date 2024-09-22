@@ -1,5 +1,6 @@
 import customtkinter as ctk 
 from view.Menu import open_menu
+from view.Cadastro import open_cadastro_screen
 
 # Configurando o tema e a aparência
 ctk.set_appearance_mode("System")  # Modos: "System", "Dark", "Light"
@@ -49,7 +50,7 @@ def open_login_screen():
     button_login.pack(padx=10, pady=10)
 
     # Botão de cadastro (com função ainda não implementada)
-    button_register = ctk.CTkButton(frame, text="Cadastrar", fg_color="transparent", text_color="#0377fc", hover_color="#2a2d30", command=lambda: label_result.configure(text="Função de cadastro ainda não implementada"), width=300)
+    button_register = ctk.CTkButton(frame, text="Cadastrar", fg_color="transparent", text_color="#0377fc", hover_color="#2a2d30", command=lambda: open_cadastro_screen(app), width=300)
     button_register.pack(padx=10)
 
     # Label para exibir mensagens de erro ou sucesso
