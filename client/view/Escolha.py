@@ -50,12 +50,12 @@ def exibir_detalhes_voo(frame, voo, app):
     voo_frame.pack(fill="x", padx=10, pady=10, expand=True)
 
     # Exibe os detalhes do voo
-    ctk.CTkLabel(voo_frame, text=f"Voo {voo.id}", font=("Arial", 14, "bold")).grid(row=0, column=0, sticky="w", padx=10, pady=2)
-    ctk.CTkLabel(voo_frame, text=f"{voo.origem} para {voo.destino}", font=("Arial", 12)).grid(row=1, column=0, sticky="w", padx=10, pady=1)
-    ctk.CTkLabel(voo_frame, text=f"Preço: R$ {voo.preco}", font=("Arial", 12)).grid(row=2, column=0, sticky="w", padx=10, pady=1)
+    ctk.CTkLabel(voo_frame, text_color="black", text=f"Voo {voo.id}", font=("Arial", 14, "bold")).grid(row=0, column=0, sticky="w", padx=10, pady=2)
+    ctk.CTkLabel(voo_frame, text_color="black",text=f"{voo.origem} para {voo.destino}", font=("Arial", 12)).grid(row=1, column=0, sticky="w", padx=10, pady=1)
+    ctk.CTkLabel(voo_frame, text_color="black",text=f"Preço: R$ {voo.preco}", font=("Arial", 12)).grid(row=2, column=0, sticky="w", padx=10, pady=1)
 
     # Seção de seleção de assento
-    ctk.CTkLabel(voo_frame, text="Selecione o assento:", font=("Arial", 12)).grid(row=3, column=0, sticky="w", padx=10, pady=1)
+    ctk.CTkLabel(voo_frame, text_color="black",text="Selecione o assento:", font=("Arial", 12)).grid(row=3, column=0, sticky="w", padx=10, pady=1)
     selected_assento = ctk.StringVar(value="00")
 
     
