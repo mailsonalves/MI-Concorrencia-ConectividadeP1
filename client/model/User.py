@@ -83,3 +83,14 @@ class User():
                 return 'Ocupado'
         else:
             return False
+    
+    def listar_passsagens(self, passagens_de_voos, voos):
+        list_voos = []
+        for passagem in passagens_de_voos:
+            for voo in voos:
+                if voo.id == passagem.id_voo:
+                    temp = [voo, passagem]
+          
+                    list_voos.append(temp)  
+                    break  
+        return list_voos

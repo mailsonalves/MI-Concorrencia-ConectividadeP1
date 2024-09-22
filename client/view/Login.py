@@ -1,5 +1,6 @@
 import customtkinter as ctk 
-from Menu import open_menu  # Importa o módulo do menu
+from view.Menu import open_menu
+from view.Cadastro import open_cadastro_screen
 
 # Configurando o tema e a aparência
 ctk.set_appearance_mode("System")  # Modos: "System", "Dark", "Light"
@@ -7,18 +8,21 @@ ctk.set_default_color_theme("blue")  # Temas: "blue", "green", "dark-blue"
 
 # Função de login
 def login():
+    from cliente_main import client
     username = entry_username.get()
     password = entry_password.get()
-
+    auth = client.authenticate(username,password)
     # Lógica de autenticação simples (pode ser adaptada para validação real)
-    if username == "admin" and password == "1234":
+    if auth != False:
         label_result.configure(text="Login bem-sucedido!", text_color="green")
-        open_menu(app)  # Chama a função para abrir o dashboard
+        user_token = auth.get("token")
+        open_menu(app,user_token)  # Chama a função para abrir o dashboard
     else:
         label_result.configure(text="Usuário ou senha incorretos", text_color="red")
 
 # Função para exibir a tela de login
 def open_login_screen():
+ 
     # Limpa a tela atual
     for widget in app.winfo_children():
         widget.destroy()
@@ -46,7 +50,7 @@ def open_login_screen():
     button_login.pack(padx=10, pady=10)
 
     # Botão de cadastro (com função ainda não implementada)
-    button_register = ctk.CTkButton(frame, text="Cadastrar", fg_color="transparent", text_color="#0377fc", hover_color="#2a2d30", command=lambda: label_result.configure(text="Função de cadastro ainda não implementada"), width=300)
+    button_register = ctk.CTkButton(frame, text="Cadastrar", fg_color="transparent", text_color="#0377fc", hover_color="#2a2d30", command=lambda: open_cadastro_screen(app), width=300)
     button_register.pack(padx=10)
 
     # Label para exibir mensagens de erro ou sucesso
