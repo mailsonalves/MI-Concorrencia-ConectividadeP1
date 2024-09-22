@@ -115,7 +115,7 @@ def exibir_listagem_voos(app, user_token):
 
     # Botão de pesquisa
     ctk.CTkButton(entry_frame, text="Pesquisar", width=50, command=lambda: pesquisar(app)).grid(row=0, column=2, padx=10, pady=5)
-
+    
     # Exibindo a lista de voos
     global voos
     voos = client.lista_de_voos()

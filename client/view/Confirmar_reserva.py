@@ -1,10 +1,15 @@
 import customtkinter as ctk
+import tkinter.messagebox as messagebox
 
 
 # Função para confirmar reserva
 def confirmar_reserva():
+    messagebox.showinfo("Compra Realizada")
     print("Reserva confirmada!")
-
+""" 
+def cancelar_compra():
+    exibir_listagem_voos()
+"""
 # Função para exibir a tela de confirmação de reserva
 def tela_confirmacao_reserva(app, passagem):
     from cliente_main import client
@@ -33,7 +38,6 @@ def tela_confirmacao_reserva(app, passagem):
     label_destino.grid(row=3, column=0, sticky="w", padx=10)
 
 
-
     label_assentos = ctk.CTkLabel(frame,text_color="black", text=f"Assentos: {passagem.assento}", font=("Arial", 12))
     label_assentos.grid(row=5, column=0, sticky="w", padx=10)
 
@@ -44,7 +48,7 @@ def tela_confirmacao_reserva(app, passagem):
     button_confirmar = ctk.CTkButton(frame, text="Confirmar Reserva", command=confirmar_reserva, width=300)
     button_confirmar.grid(row=7, column=0, columnspan=2, pady=0, padx= 5)
     
-    voltar_button = ctk.CTkButton(frame, text="Voltar", command=confirmar_reserva, width=300)
+    voltar_button = ctk.CTkButton(frame, text="Cancelar Compra", command=confirmar_reserva, width=300)
     voltar_button.grid(row=8, column=0, columnspan=2, pady=2, padx= 5)
 
 # Inicializando a aplicação
