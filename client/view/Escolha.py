@@ -29,7 +29,7 @@ def selecionar_voo(app, voo_id, token):
     from cliente_main import client
 
     user = client.getUser(token)
-    print(select_voo)
+    #print(select_voo)
     if select_voo == " ":
         # Exibe mensagem de erro se nenhum assento for selecionado
         messagebox.showerror("Erro", "Por favor, selecione um assento.")

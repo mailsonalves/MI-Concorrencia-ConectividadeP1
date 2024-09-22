@@ -89,5 +89,8 @@ class User():
         for passagem in passagens_de_voos:
             for voo in voos:
                 if voo.id == passagem.id_voo:
-                    list_voos.append(voo)
+                    temp = [voo, passagem]
+          
+                    list_voos.append(temp)  
+                    break  
         return list_voos

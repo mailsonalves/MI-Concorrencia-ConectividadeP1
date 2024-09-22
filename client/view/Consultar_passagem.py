@@ -28,15 +28,15 @@ def exibir_detalhes_voo(frame, voo, app):
     voo_frame.pack(fill="x", padx=10, pady=10, expand=True)
 
     # Exibe os detalhes do voo
-    ctk.CTkLabel(voo_frame, text_color="black", text=f"Voo {voo.id}", font=("Arial", 14, "bold")).grid(row=0, column=0, sticky="w", padx=10, pady=2)
-    ctk.CTkLabel(voo_frame, text_color="black",text=f"{voo.origem} para {voo.destino}", font=("Arial", 12)).grid(row=1, column=0, sticky="w", padx=10, pady=1)
-    ctk.CTkLabel(voo_frame, text_color="black",text=f"Preço: R$ {voo.preco}", font=("Arial", 12)).grid(row=2, column=0, sticky="w", padx=10, pady=1)
+    ctk.CTkLabel(voo_frame, text_color="black", text=f"Voo {voo[0].id}", font=("Arial", 14, "bold")).grid(row=0, column=0, sticky="w", padx=10, pady=2)
+    ctk.CTkLabel(voo_frame, text_color="black",text=f"{voo[0].origem} para {voo[0].destino}", font=("Arial", 12)).grid(row=1, column=0, sticky="w", padx=10, pady=1)
+    ctk.CTkLabel(voo_frame, text_color="black",text=f"Preço: R$ {voo[0].preco}", font=("Arial", 12)).grid(row=2, column=0, sticky="w", padx=10, pady=1)
 
     # Seção de seleção de assento
-    ctk.CTkLabel(voo_frame, text_color="black",text="Selecione o assento:", font=("Arial", 12)).grid(row=3, column=0, sticky="w", padx=10, pady=1)
+    ctk.CTkLabel(voo_frame, text_color="black",text=f"Assento: {voo[1].assento}", font=("Arial", 12)).grid(row=3, column=0, sticky="w", padx=10, pady=1)
 
     # Botão de Selecionar
-    ctk.CTkButton(voo_frame, text="Deletar", fg_color="red",command=lambda: selecionar_voo(app, voo.id), width=200).grid(row=4 , column=0, padx=10, pady=5)
+    ctk.CTkButton(voo_frame, text="Deletar",hover_color="#470a0a", fg_color="red",command=lambda: selecionar_voo(app, voo.id), width=200).grid(row=4 , column=0, padx=10, pady=5)
 
 
 # Função para exibir a lista de voos
@@ -50,7 +50,7 @@ def exibir_lista_voos(frame, lista_voos, app):
         for voo in lista_voos:
             exibir_detalhes_voo(frame, voo, app)
     else:
-        exibir_detalhes_voo(frame, lista_voos, app)
+        exibir_detalhes_voo(frame, lista_voos[0], app)
 
 # Função para iniciar a interface gráfica
 def exibir_consulta_voos(app, user_token):
@@ -73,7 +73,7 @@ def exibir_consulta_voos(app, user_token):
     frame_bottom.pack(side="bottom", fill="x")
 
     # Botão de Voltar
-    voltar_btn = ctk.CTkButton(frame_bottom, text="Voltar", command=lambda: voltar(app, token))
+    voltar_btn = ctk.CTkButton(frame_bottom, text="Voltar",  command=lambda: voltar(app, token))
     voltar_btn.grid(row=0, column=0, columnspan=2, pady=10, padx=5)
     # Título
     ctk.CTkLabel(frame, text="Suas Passagens", font=("Arial", 20)).pack(pady=5)
@@ -83,4 +83,5 @@ def exibir_consulta_voos(app, user_token):
     voos = client.lista_de_voos()
     user = client.getUser(token)
     voos_user = user.listar_passsagens(user.passagens, voos)
+    print(voos_user)
     exibir_lista_voos(scrollbar, voos_user, app)
