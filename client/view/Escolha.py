@@ -30,16 +30,18 @@ def selecionar_voo(app, voo_id, token):
 
     user = client.getUser(token)
     print(select_voo)
-    if select_voo == '':
+    if select_voo == " ":
         # Exibe mensagem de erro se nenhum assento for selecionado
         messagebox.showerror("Erro", "Por favor, selecione um assento.")
     else:
         passagem = client.confirmar_compra(user, voos, voo_id, select_voo)
-        print(f'esolha: {passagem}')
-        tela_confirmacao_reserva(app, passagem, token)
+        if passagem != False and passagem != 'Ocupado':
+            print(f'esolha: {passagem}')
+            tela_confirmacao_reserva(app, passagem, token)
+        else:
+            messagebox.showerror("Erro", "Assento ocpuado")
+            
         
-
-
 
 # Função para exibir detalhes de cada voo
 def exibir_detalhes_voo(frame, voo, app, token):
@@ -56,7 +58,7 @@ def exibir_detalhes_voo(frame, voo, app, token):
 
     # Seção de seleção de assento
     ctk.CTkLabel(voo_frame, text_color="black",text="Selecione o assento:", font=("Arial", 12)).grid(row=3, column=0, sticky="w", padx=10, pady=1)
-    selected_assento = ctk.StringVar(value="00")
+    selected_assento = ctk.StringVar(value=" ")
 
     
     # Botões de seleção de assento
