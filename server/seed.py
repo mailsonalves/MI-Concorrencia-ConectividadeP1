@@ -22,6 +22,8 @@ def gerar_voos(voos):
             voo_array_temp = []  
             for capital_destino in destinos:
                 New_voo = Voo(capital_origem, capital_destino)  
+                number_random = random.randint(0, len(precos) - 1) 
+                New_voo.preco =  precos[number_random]
                 voo_array_temp.append(New_voo)  
             voos[capital_origem] = voo_array_temp
 
@@ -34,6 +36,6 @@ def gerar_user(users):
             users[New_user.id_user].username = users[New_user.id_user].username + str(number)
             users[New_user.id_user].password = users[New_user.id_user].password + str(number)
             users[New_user.id_user].name = nomes[number]
-            number_random = random.randint(0, len(precos) - 1)  
-            users[New_user.id_user].preco = precos[number_random]
+            
+       
             

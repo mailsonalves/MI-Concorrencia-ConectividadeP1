@@ -149,6 +149,21 @@ class Cliente:
             
             return False
 
+    def lista_de_voos(self):
+        all_trechos = self.__request(201, "")  # all_trechos é um dicionário cujos valores são listas
+
+        # Inicializando uma lista para armazenar todos os valores combinados
+        combined_list = []
+
+        # Iterando sobre os valores de all_trechos e adicionando todos à lista combinada
+        for trechos in all_trechos.values():
+            combined_list.extend(trechos)
+
+        return combined_list
+
+        
+        
+    
     def selecionar_voo(self, origem, destino):
         """
         Permite que o usuário selecione um voo disponível.
@@ -172,7 +187,7 @@ class Cliente:
         #id_voo = self.view.solicitar_id_voo()
         #self._confirmar_compra(user, all_trechos[origem], id_voo)
 
-    def _confirmar_compra(self, user, voos, id_voo_selecionado):
+    def confirmar_compra(self, user, voos, id_voo_selecionado, assento):
         """
         Confirma a compra de uma passagem para um voo específico.
 
@@ -191,20 +206,19 @@ class Cliente:
         """
         for voo in voos:
             if voo.id == id_voo_selecionado:
-                escolha_assento, cpf = self.view.solicitar_assento_e_cpf(voo)
-                passagem = user.comprar_passagem(voo, escolha_assento, cpf)
+                passagem = user.comprar_passagem(voo, assento, cpf = '5465654654')
                 if passagem and passagem != "Ocupado":
-                    self.view.mostrar_mensagem(
+                    print(
                         f"Compra confirmada:\nID do Voo: {passagem.id_voo}\nID do Passageiro: {passagem.id_passageiro}\nCPF: {passagem.cpf}\nAssento: {passagem.assento}"
                     )
                     self.__request(202, passagem)
-                    return
+                    return True
                 elif passagem == "Ocupado":
-                    self.view.mostrar_mensagem("Assento indisponível")
-                    return
+                    print("Assento indisponível")
+                    return False
                 else:
-                    self.view.mostrar_mensagem("Voo lotado")
-                    return
+                    print("Voo lotado")
+                    return "Ocupado"
 
     def _imprimir_passagens_user(self, user):
         """
@@ -260,3 +274,7 @@ class Cliente:
                 
                 self._s.close()
                 break
+    
+    def getUser(self, token):
+        return self.__request(102, token)
+        

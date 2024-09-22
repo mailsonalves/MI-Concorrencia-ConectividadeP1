@@ -7,6 +7,7 @@ def open_menu(app, auth):
     global app_global
     app_global = app
     user = auth.get("user")
+    user_token = auth.get("token")
     # Limpa a tela atual antes de exibir o menu
     for widget in app.winfo_children():
         widget.destroy()
@@ -20,7 +21,7 @@ def open_menu(app, auth):
     label_title.pack(pady=20)
 
     # Botão "Comprar Passagem"
-    button_comprar = ctk.CTkButton(frame, text="Comprar Passagem", command=comprar_passagem, width=200)
+    button_comprar = ctk.CTkButton(frame, text="Comprar Passagem", command=lambda: comprar_passagem(user_token), width=200)
     button_comprar.pack(pady=10)
 
     # Botão "Consultar Passagem"
@@ -32,8 +33,8 @@ def open_menu(app, auth):
     button_sair.pack(pady=10)
 
 # Função para o botão "Comprar Passagem"
-def comprar_passagem():
-    exibir_listagem_voos(app_global)
+def comprar_passagem(user_token):
+    exibir_listagem_voos(app_global,user_token)
 
 # Função para o botão "Consultar Passagem"
 def consultar_passagem():
