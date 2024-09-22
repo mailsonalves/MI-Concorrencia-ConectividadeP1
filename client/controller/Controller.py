@@ -212,7 +212,7 @@ class Cliente:
                         f"Compra confirmada:\nID do Voo: {passagem.id_voo}\nID do Passageiro: {passagem.id_passageiro}\nCPF: {passagem.cpf}\nAssento: {passagem.assento}"
                     )
                     self.__request(202, passagem)
-                    return True
+                    return passagem
                 elif passagem == "Ocupado":
                     print("Assento indisponível")
                     return False
@@ -278,3 +278,24 @@ class Cliente:
     def getUser(self, token):
         return self.__request(102, token)
         
+    
+    def imprimir_passagem(self, passagens_de_voos: list, voos: dict):
+        for passagem in passagens_de_voos:
+            for voo in voos.values():
+                for voo_user in voo:
+                    if voo_user.id == passagem.id_voo:
+                        print("-" * 60)
+                        print(f'ID: {passagem.id_voo}')
+                        print(f'CPF: {passagem.cpf}')
+                        print(f'Origem: {voo_user.origem}')
+                        print(f'Destino: {voo_user.destino}')
+                        print(f'Assento: {passagem.assento}')
+                        print("-" * 60)
+                        
+    def get_voo(self, id_voo):
+        voos = self.__request(201, "")
+        for voo in voos.values():
+                for voo_list in voo:
+                    if voo_list.id == id_voo:
+                        return voo_list
+        return False

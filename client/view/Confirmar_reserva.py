@@ -6,7 +6,10 @@ def confirmar_reserva():
     print("Reserva confirmada!")
 
 # Função para exibir a tela de confirmação de reserva
-def tela_confirmacao_reserva(app):
+def tela_confirmacao_reserva(app, passagem):
+    from cliente_main import client
+    print(passagem)
+    voo = client.get_voo(passagem.id_voo)
     # Limpa a janela principal
     for widget in app.winfo_children():
         widget.destroy()
@@ -20,22 +23,21 @@ def tela_confirmacao_reserva(app):
     label_title.grid(row=0, column=0, columnspan=2, pady=10)
 
     # Detalhes da reserva
-    label_voo = ctk.CTkLabel(frame,text_color="black", text="Voo: FL001", font=("Arial", 12))
+    label_voo = ctk.CTkLabel(frame,text_color="black", text=f"Voo: {passagem.id_voo}", font=("Arial", 12))
     label_voo.grid(row=1, column=0, sticky="w", padx=10)
 
-    label_origem = ctk.CTkLabel(frame,text_color="black", text="Origem: asdsa", font=("Arial", 12))
+    label_origem = ctk.CTkLabel(frame,text_color="black", text=f"Origem: {voo.origem}", font=("Arial", 12))
     label_origem.grid(row=2, column=0, sticky="w", padx=10)
 
-    label_destino = ctk.CTkLabel(frame,text_color="black", text="Destino: asdsad", font=("Arial", 12))
+    label_destino = ctk.CTkLabel(frame,text_color="black", text=f"Destino: {voo.destino}", font=("Arial", 12))
     label_destino.grid(row=3, column=0, sticky="w", padx=10)
 
-    label_partida = ctk.CTkLabel(frame,text_color="black", text="Data de Partida: 2024-02-12", font=("Arial", 12))
-    label_partida.grid(row=4, column=0, sticky="w", padx=10)
 
-    label_assentos = ctk.CTkLabel(frame,text_color="black", text="Assentos: 2", font=("Arial", 12))
+
+    label_assentos = ctk.CTkLabel(frame,text_color="black", text=f"Assentos: {passagem.assento}", font=("Arial", 12))
     label_assentos.grid(row=5, column=0, sticky="w", padx=10)
 
-    label_preco_total = ctk.CTkLabel(frame,text_color="black", text="Preço Total: R$ 500", font=("Arial", 12))
+    label_preco_total = ctk.CTkLabel(frame,text_color="black", text=f"Preço Total: R$ {voo.preco}", font=("Arial", 12))
     label_preco_total.grid(row=6, column=0, sticky="w", padx=10)
 
     # Botão de confirmação

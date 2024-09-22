@@ -35,10 +35,11 @@ def selecionar_voo(app, voo_id):
         messagebox.showerror("Erro", "Por favor, selecione um assento.")
     else:
         passagem = client.confirmar_compra(user, voos, voo_id, select_voo)
+        print(f'esolha: {passagem}')
+        tela_confirmacao_reserva(app, passagem)
+        
 
 
-    if passagem:
-        tela_confirmacao_reserva(app)
 
 # Função para exibir detalhes de cada voo
 def exibir_detalhes_voo(frame, voo, app):
