@@ -25,7 +25,7 @@ def radioButton_event(selected_assento):
 
 
 # Função para selecionar voo e confirmar a compra
-def selecionar_voo(app, voo_id):
+def selecionar_voo(app, voo_id, token):
     from cliente_main import client
 
     user = client.getUser(token)
@@ -36,13 +36,13 @@ def selecionar_voo(app, voo_id):
     else:
         passagem = client.confirmar_compra(user, voos, voo_id, select_voo)
         print(f'esolha: {passagem}')
-        tela_confirmacao_reserva(app, passagem)
+        tela_confirmacao_reserva(app, passagem, token)
         
 
 
 
 # Função para exibir detalhes de cada voo
-def exibir_detalhes_voo(frame, voo, app):
+def exibir_detalhes_voo(frame, voo, app, token):
     
 
     # Criação de um frame para o voo
@@ -68,10 +68,10 @@ def exibir_detalhes_voo(frame, voo, app):
     radio_a2.grid(row=5, column=0, padx=10, pady=1, sticky="w")
 
     # Botão de Selecionar
-    ctk.CTkButton(voo_frame, text="Selecionar", command=lambda: selecionar_voo(app, voo.id), width=200).grid(row=6 + len(voo.vagas.keys()), column=0, padx=10, pady=5)
+    ctk.CTkButton(voo_frame, text="Selecionar", command=lambda: selecionar_voo(app, voo.id, token), width=200).grid(row=6 + len(voo.vagas.keys()), column=0, padx=10, pady=5)
 
 # Função para exibir a lista de voos
-def exibir_lista_voos(frame, lista_voos, app):
+def exibir_lista_voos(frame, lista_voos, app, token):
     # Limpa os itens anteriores
     for widget in frame.winfo_children():
         widget.destroy()
@@ -79,10 +79,19 @@ def exibir_lista_voos(frame, lista_voos, app):
     # Exibe cada voo da lista
     if isinstance(lista_voos, list):
         for voo in lista_voos:
-            exibir_detalhes_voo(frame, voo, app)
+            exibir_detalhes_voo(frame, voo, app, token)
     else:
-        exibir_detalhes_voo(frame, lista_voos, app)
-
+        exibir_detalhes_voo(frame, lista_voos, app, token)
+        
+def voltar(app, token):
+    from view.Menu import open_menu
+    
+    # Função que define o comportamento do botão voltar
+    for widget in app.winfo_children():
+        widget.destroy()
+    # Aqui você pode adicionar o código que irá exibir a tela anterior, por exemplo:
+    open_menu(app, token)
+    
 # Função para iniciar a interface gráfica
 def exibir_listagem_voos(app, user_token):
     global entry_origem, entry_destino, scrollbar, token
@@ -112,6 +121,13 @@ def exibir_listagem_voos(app, user_token):
 
     entry_destino = ctk.CTkEntry(entry_frame, placeholder_text="Destino", width=150)
     entry_destino.grid(row=0, column=1, padx=10, pady=5)
+    
+    frame_bottom = ctk.CTkFrame(app, fg_color="transparent")
+    frame_bottom.pack(side="bottom", fill="x")
+
+    # Botão de Voltar
+    voltar_btn = ctk.CTkButton(frame_bottom, text="Voltar", command=lambda: voltar(app, token))
+    voltar_btn.grid(row=0, column=0, columnspan=2, pady=10, padx=5)
 
     # Botão de pesquisa
     ctk.CTkButton(entry_frame, text="Pesquisar", width=50, command=lambda: pesquisar(app)).grid(row=0, column=2, padx=10, pady=5)
@@ -119,4 +135,4 @@ def exibir_listagem_voos(app, user_token):
     # Exibindo a lista de voos
     global voos
     voos = client.lista_de_voos()
-    exibir_lista_voos(scrollbar, voos, app)
+    exibir_lista_voos(scrollbar, voos, app, token)
