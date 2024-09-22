@@ -1,5 +1,4 @@
 import customtkinter as ctk
-from view.Menu import open_menu
 def radioButton_event(selected_assento):
     global select_voo
     select_voo = selected_assento.get()
@@ -12,12 +11,14 @@ def selecionar_voo(app, voo_id):
 
     user = client.getUser(token)
     
-def voltar(app):
+def voltar(app, token):
+    from view.Menu import open_menu
+    
     # Função que define o comportamento do botão voltar
     for widget in app.winfo_children():
         widget.destroy()
     # Aqui você pode adicionar o código que irá exibir a tela anterior, por exemplo:
-    open_menu(app)
+    open_menu(app, token)
 # Função para exibir detalhes de cada voo
 def exibir_detalhes_voo(frame, voo, app):
     
@@ -72,7 +73,7 @@ def exibir_consulta_voos(app, user_token):
     frame_bottom.pack(side="bottom", fill="x")
 
     # Botão de Voltar
-    voltar_btn = ctk.CTkButton(frame_bottom, text="Voltar", fg_color="red", command=lambda: voltar(app))
+    voltar_btn = ctk.CTkButton(frame_bottom, text="Voltar", command=lambda: voltar(app, token))
     voltar_btn.grid(row=0, column=0, columnspan=2, pady=10, padx=5)
     # Título
     ctk.CTkLabel(frame, text="Suas Passagens", font=("Arial", 20)).pack(pady=5)

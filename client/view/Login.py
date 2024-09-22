@@ -14,7 +14,8 @@ def login():
     # Lógica de autenticação simples (pode ser adaptada para validação real)
     if auth != False:
         label_result.configure(text="Login bem-sucedido!", text_color="green")
-        open_menu(app,auth)  # Chama a função para abrir o dashboard
+        user_token = auth.get("token")
+        open_menu(app,user_token)  # Chama a função para abrir o dashboard
     else:
         label_result.configure(text="Usuário ou senha incorretos", text_color="red")
 

@@ -2,12 +2,15 @@
 import customtkinter as ctk
 from view.Escolha import exibir_listagem_voos
 from view.Consultar_passagem import exibir_consulta_voos
+
 app_global = ''
-def open_menu(app, auth):
+def open_menu(app, user_token):
+    from cliente_main import client
     global app_global
     app_global = app
-    user = auth.get("user")
-    user_token = auth.get("token")
+    user = client.getUser(user_token)
+    #user = auth.get("user")
+    #user_token = auth.get("token")
     # Limpa a tela atual antes de exibir o menu
     for widget in app.winfo_children():
         widget.destroy()
