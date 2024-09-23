@@ -90,7 +90,9 @@ def exibir_lista_voos(frame, lista_voos, app, token):
     # Exibe cada voo da lista
     if isinstance(lista_voos, list):
         for voo in lista_voos:
-            exibir_detalhes_voo(frame, voo, app, token)
+            disponibilidades = not all(voo.vagas.values())
+            if disponibilidades == True:
+                exibir_detalhes_voo(frame, voo, app, token)
     else:
         exibir_detalhes_voo(frame, lista_voos, app, token)
         

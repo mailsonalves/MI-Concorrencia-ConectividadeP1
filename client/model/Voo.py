@@ -40,4 +40,4 @@ class Voo():
         self.destino = destino
         self.preco = 0
         self.vagas = {'A1': False, 'A2': False}
-        self.disponibilidade = any(not ocupada for ocupada in self.vagas.values())
+        self.disponibilidade = not all(self.vagas.values())
