@@ -1,4 +1,5 @@
-
+import random 
+import string
 
 class Passagem():
     """
@@ -34,7 +35,7 @@ class Passagem():
         cpf : str
             O CPF do passageiro.
         """
-        # self.id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+        self.id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
         self.id_voo = id_voo
         self.id_passageiro = id_passageiro
         self.cpf = cpf

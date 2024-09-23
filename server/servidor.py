@@ -202,7 +202,42 @@ class Servidor:
                                                     conn.sendall(pickle.dumps(False))
                                                     print("Assento ocupado")
                                                     break
+                                                
+                            elif action_code == 203:
+                                """
+                                Realiza a compra de uma passagem para um voo específico.
 
+                                Args:
+                                    user_info (Passagem): Objeto Passagem contendo detalhes da compra.
+
+                                Resposta:
+                                    Retorna True se a compra for realizada com sucesso,
+                                    ou False se o assento já estiver ocupado.
+                                """
+                                with lock:
+                                  for voo in voos.values():
+                                    for num in range(len(voo)):
+                                        # Verifica se o voo do usuário é o mesmo
+                                        if voo[num].id == user_info.id_voo:
+                                            # Verifica se o assento está realmente ocupado
+                                            if voo[num].vagas[user_info.assento]:
+                                                # Procura pela passagem no histórico do usuário
+                                                for passagem in users[user_info.id_passageiro].passagens:
+                                                    if user_info.id == passagem.id:
+                                                        # Libera o assento e remove a passagem
+                                                        voo[num].vagas[user_info.assento] = False
+                                                        users[user_info.id_passageiro].passagens.remove(passagem)
+
+                                                        # Envia confirmação de sucesso para o cliente
+                                                        conn.sendall(pickle.dumps(True))
+                                                        print(f"Deletada, Cliente -> [{self._host}] : [{self._port}]")
+                                                        break
+                                                break
+                                            else:
+                                                # Assento já está ocupado (não pode remover)
+                                                conn.sendall(pickle.dumps(False))
+                                                print("Assento ocupado")
+                                                break
                         except pickle.UnpicklingError:
                             print("Erro ao desserializar os dados recebidos.")
 

@@ -207,9 +207,7 @@ class Cliente:
             if voo.id == id_voo_selecionado:
                 passagem = user.comprar_passagem(voo, assento, cpf = '5465654654')
                 if passagem and passagem != "Ocupado":
-                    print(
-                        f"Compra confirmada:\nID do Voo: {passagem.id_voo}\nID do Passageiro: {passagem.id_passageiro}\nCPF: {passagem.cpf}\nAssento: {passagem.assento}"
-                    )
+                    print(f"Compra confirmada")
                     self.__request(202, passagem)
                     return passagem
                 elif passagem == "Ocupado":
@@ -218,6 +216,29 @@ class Cliente:
                 else:
                     print("Voo lotado")
                     return "Ocupado"
+                
+    def deletar_compra(self, voos, passagem):
+        """
+        Confirma a compra de uma passagem para um voo específico.
+
+        Parâmetros:
+        -----------
+        user : User
+            O usuário que está comprando a passagem.
+        voos : list
+            Lista de voos disponíveis.
+        id_voo_selecionado : str
+            O ID do voo selecionado.
+
+        Retorna:
+        --------
+        None
+        """
+        for voo in voos:
+            if voo.id == passagem.id_voo:
+                    self.__request(203, passagem)
+                    return True
+        return False
 
     def _imprimir_passagens_user(self, user):
         """
