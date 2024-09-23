@@ -153,6 +153,8 @@ class Servidor:
                                         new_user = User(
                                             user_info.get("password_user"),user_info.get("username")
                                         )
+                                        name = user_info.get("name")
+                                        new_user.name = name
                                         users[new_user.id_user] = new_user
                                         conn.sendall(pickle.dumps(True))  # Cadastro bem-sucedido, retorna True
 

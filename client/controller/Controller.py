@@ -1,7 +1,5 @@
 import socket
 import pickle
-from model.User import User
-from view.View import View
 import threading
 
 lock = threading.Lock()
@@ -106,7 +104,7 @@ class Cliente:
             self.view.mostrar_mensagem("Erro ao desserializar os dados recebidos.")
             return None
 
-    def cadastro( self, username, password):
+    def cadastro( self, username, password, name):
         """
         Solicita ao usuário um nome de usuário e senha para registro.
 
@@ -114,7 +112,7 @@ class Cliente:
         --------
         None
         """
-        new_user = self.__request(101, {"username": username, "password_user": password}
+        new_user = self.__request(101, {"username": username, "password_user": password, "name": name}
         )
         if new_user == True:
             print("Usuário cadastrado.")
