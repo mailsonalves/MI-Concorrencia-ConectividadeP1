@@ -1,6 +1,7 @@
 import customtkinter as ctk 
 from view.Menu import open_menu
 
+
 # Configurando o tema e a aparência
 ctk.set_appearance_mode("System")  # Modos: "System", "Dark", "Light"
 ctk.set_default_color_theme("blue")  # Temas: "blue", "green", "dark-blue"
@@ -19,16 +20,12 @@ def cadastro(app):
     from cliente_main import client
     username = entry_username.get()
     password = entry_password.get()
+    
     confirmar_password = entry_password_confirm.get()
     if (password == confirmar_password) and ((password != '') and (confirmar_password != '')):
-        auth = client.authenticate(username,password)
-        # Lógica de autenticação simples (pode ser adaptada para validação real)
-        if auth != False:
-            label_result.configure(text="Login bem-sucedido!", text_color="green")
-            user_token = auth.get("token")
-            open_menu(app,user_token)  # Chama a função para abrir o dashboard
-        else:
-            label_result.configure(text="Usuário ou senha incorretos", text_color="red")
+       client._cadastro(username, password)
+       voltar(app)
+            
     else:
         label_result.configure(text="As senhas não coincidem ", text_color="red")
         
@@ -57,12 +54,12 @@ def open_cadastro_screen(app):
     # Campo de entrada para senha
     entry_password = ctk.CTkEntry(frame, placeholder_text="Senha", show="*", width=300)
     entry_password.pack(pady=10)
-    # Campo de entrada para senha
+    # Campo de entrada para confirmação de senha
     entry_password_confirm = ctk.CTkEntry(frame, placeholder_text="Confirme a senha", show="*", width=300)
     entry_password_confirm.pack(pady=10)
 
 
-    # Botão de cadastro (com função ainda não implementada)
+    # Botão de cadastro ()
     button_register = ctk.CTkButton(frame, text="Cadastrar", command=lambda: cadastro(app), width=300)
     button_register.pack(padx=10)
     

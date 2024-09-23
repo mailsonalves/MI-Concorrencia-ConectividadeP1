@@ -106,7 +106,7 @@ class Cliente:
             self.view.mostrar_mensagem("Erro ao desserializar os dados recebidos.")
             return None
 
-    def _cadastro(self, username, password):
+    def _cadastro( self, username, password):
         """
         Solicita ao usuário um nome de usuário e senha para registro.
 

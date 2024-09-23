@@ -11,7 +11,7 @@ def login():
     from cliente_main import client
     username = entry_username.get()
     password = entry_password.get()
-    auth = client.authenticate(username,password)
+    auth = client.authenticate( username,password)
     # Lógica de autenticação simples (pode ser adaptada para validação real)
     if auth != False:
         label_result.configure(text="Login bem-sucedido!", text_color="green")
