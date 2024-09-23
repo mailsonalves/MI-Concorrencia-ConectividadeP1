@@ -20,16 +20,14 @@ def cadastro(app):
     from cliente_main import client
     username = entry_username.get()
     password = entry_password.get()
+    name = entry_name.get()
     confirmar_password = entry_password_confirm.get()
     if (password == confirmar_password) and ((password != '') and (confirmar_password != '')):
-        if (client.cadastro(username, password) == True):
+        if (client.cadastro(username, password, name) == True):
             label_result.configure(text="Usuário cadastrado", text_color="green")
         else:
             label_result.configure(text="Usuário já existe", text_color="red")
-            
-
        #voltar(app)
-            
     else:
         label_result.configure(text="As senhas não coincidem ", text_color="red")
         
@@ -49,11 +47,15 @@ def open_cadastro_screen(app):
     label_title = ctk.CTkLabel(frame, text="Cadastre-se", font=("Arial", 20))
     label_title.pack(pady=20)
 
-    global entry_username, entry_password, label_result,entry_password_confirm
+    global entry_username, entry_password, label_result,entry_password_confirm, entry_name
 
     # Campo de entrada para usuário
-    entry_username = ctk.CTkEntry(frame, placeholder_text="Usuário", width=300)
+    entry_username = ctk.CTkEntry(frame, placeholder_text="Username", width=300)
     entry_username.pack(pady=10)
+    
+    # Campo de entrada para usuário
+    entry_name = ctk.CTkEntry(frame, placeholder_text="Nome", width=300)
+    entry_name.pack(pady=10)
 
     # Campo de entrada para senha
     entry_password = ctk.CTkEntry(frame, placeholder_text="Senha", show="*", width=300)
