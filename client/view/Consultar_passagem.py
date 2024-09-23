@@ -1,43 +1,46 @@
 import customtkinter as ctk
+
 def radioButton_event(selected_assento):
     global select_voo
     select_voo = selected_assento.get()
     return
 
-
 # Função para selecionar voo e confirmar a compra
-def selecionar_voo(app, voo_id):
+def deletar_voo(app, passagem):
     from cliente_main import client
+    remove = client.deletar_compra(voos, passagem)
+    if remove:
+        print('Deletado com sucesso')
+        # Atualiza a lista de voos na interface
+        exibir_consulta_voos(app, token)  # Atualiza a página após a remoção
+    else:
+        print('Falha ao remover')
 
-    user = client.getUser(token)
-    
 def voltar(app, token):
     from view.Menu import open_menu
     
     # Função que define o comportamento do botão voltar
     for widget in app.winfo_children():
         widget.destroy()
-    # Aqui você pode adicionar o código que irá exibir a tela anterior, por exemplo:
+    # Exibe a tela anterior (menu)
     open_menu(app, token)
+
 # Função para exibir detalhes de cada voo
 def exibir_detalhes_voo(frame, voo, app):
-    
-
     # Criação de um frame para o voo
     voo_frame = ctk.CTkFrame(frame, fg_color="white")
     voo_frame.pack(fill="x", padx=10, pady=10, expand=True)
 
     # Exibe os detalhes do voo
     ctk.CTkLabel(voo_frame, text_color="black", text=f"Voo {voo[0].id}", font=("Arial", 14, "bold")).grid(row=0, column=0, sticky="w", padx=10, pady=2)
-    ctk.CTkLabel(voo_frame, text_color="black",text=f"{voo[0].origem} para {voo[0].destino}", font=("Arial", 12)).grid(row=1, column=0, sticky="w", padx=10, pady=1)
-    ctk.CTkLabel(voo_frame, text_color="black",text=f"Preço: R$ {voo[0].preco}", font=("Arial", 12)).grid(row=2, column=0, sticky="w", padx=10, pady=1)
+    ctk.CTkLabel(voo_frame, text_color="black", text=f"{voo[0].origem} para {voo[0].destino}", font=("Arial", 12)).grid(row=1, column=0, sticky="w", padx=10, pady=1)
+    ctk.CTkLabel(voo_frame, text_color="black", text=f"Preço: R$ {voo[0].preco}", font=("Arial", 12)).grid(row=2, column=0, sticky="w", padx=10, pady=1)
 
     # Seção de seleção de assento
-    ctk.CTkLabel(voo_frame, text_color="black",text=f"Assento: {voo[1].assento}", font=("Arial", 12)).grid(row=3, column=0, sticky="w", padx=10, pady=1)
+    ctk.CTkLabel(voo_frame, text_color="black", text=f"Assento: {voo[1].assento}", font=("Arial", 12)).grid(row=3, column=0, sticky="w", padx=10, pady=1)
 
-    # Botão de Selecionar
-    ctk.CTkButton(voo_frame, text="Deletar",hover_color="#470a0a", fg_color="red",command=lambda: selecionar_voo(app, voo.id), width=200).grid(row=4 , column=0, padx=10, pady=5)
-
+    # Botão de Deletar
+    ctk.CTkButton(voo_frame, text="Deletar", hover_color="#470a0a", fg_color="red", command=lambda: deletar_voo(app, voo[1]), width=200).grid(row=4, column=0, padx=10, pady=5)
 
 # Função para exibir a lista de voos
 def exibir_lista_voos(frame, lista_voos, app):
@@ -52,6 +55,7 @@ def exibir_lista_voos(frame, lista_voos, app):
     else:
         exibir_detalhes_voo(frame, lista_voos[0], app)
 
+# Função para exibir a consulta de voos
 def exibir_consulta_voos(app, user_token):
     global scrollbar, token
     token = user_token

@@ -10,13 +10,22 @@ def voltar(app, token):
     # Aqui você pode adicionar o código que irá exibir a tela anterior, por exemplo:
     exibir_listagem_voos(app, token)
 # Função para confirmar reserva
-def confirmar_reserva():
-    messagebox.showinfo("Compra Realizada")
+def confirmar_reserva(app, token):
+    messagebox.showinfo("Confirmação de Reserva", "Compra realizada com sucesso!")
     print("Reserva confirmada!")
-""" 
-def cancelar_compra():
-    exibir_listagem_voos()
-"""
+    voltar(app,token)
+
+def cancelar_compra(app, token, passagem):
+    from cliente_main import client
+    remove = client.deletar_compra(voos, passagem)
+    if remove:
+        print('Cancelado com sucesso')
+        # Atualiza a lista de voos na interface
+        voltar(app, token)
+    else:
+        print('Falha ao cancelar')
+
+
 # Função para exibir a tela de confirmação de reserva
 def tela_confirmacao_reserva(app, passagem, token):
     from cliente_main import client
@@ -52,10 +61,10 @@ def tela_confirmacao_reserva(app, passagem, token):
     label_preco_total.grid(row=6, column=0, sticky="w", padx=10)
 
     # Botão de confirmação
-    button_confirmar = ctk.CTkButton(frame, text="Confirmar Reserva", command=confirmar_reserva, width=300)
+    button_confirmar = ctk.CTkButton(frame, text="Confirmar Reserva", command=lambda: confirmar_reserva(app, token), width=300)
     button_confirmar.grid(row=7, column=0, columnspan=2, pady=0, padx= 5)
     
-    voltar_button = ctk.CTkButton(frame, text="Cancelar Compra", command=confirmar_reserva, width=300)
+    voltar_button = ctk.CTkButton(frame, text="Cancelar Compra", command=lambda: cancelar_compra(app, token, passagem), width=300)
     voltar_button.grid(row=8, column=0, columnspan=2, pady=2, padx= 5)
     
     frame_bottom = ctk.CTkFrame(app, fg_color="transparent")
@@ -64,6 +73,9 @@ def tela_confirmacao_reserva(app, passagem, token):
     # Botão de Voltar
     voltar_btn = ctk.CTkButton(frame_bottom, text="Voltar", command=lambda: voltar(app, token))
     voltar_btn.grid(row=0, column=0, columnspan=2, pady=10, padx=5)
+    
+    global voos
+    voos = client.lista_de_voos()
 
 # Inicializando a aplicação
 
