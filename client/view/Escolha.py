@@ -48,7 +48,7 @@ def selecionar_voo(app, voo_id, token):
             print(f'esolha: {passagem}')
             tela_confirmacao_reserva(app, passagem, token)
         else:
-            messagebox.showerror("Erro", "Assento ocpuado")
+            messagebox.showerror("Erro", "Assento ocupado, Tente Outro!")
             
         
 
@@ -110,7 +110,7 @@ def exibir_listagem_voos(app, user_token):
     global entry_origem, entry_destino, scrollbar, token
     token = user_token
     from cliente_main import client
-
+  
     # Limpa a janela
     for widget in app.winfo_children():
         widget.destroy()
@@ -123,7 +123,7 @@ def exibir_listagem_voos(app, user_token):
     scrollbar.pack(pady=5, fill="both", expand=True)
 
     # Título
-    ctk.CTkLabel(frame, text="Resultado da pesquisa", font=("Arial", 20)).pack(pady=5)
+    ctk.CTkLabel(frame, text="Pesquise seu voo", font=("Arial", 20)).pack(pady=5)
 
     # Campos de entrada "Origem" e "Destino"
     entry_frame = ctk.CTkFrame(frame, fg_color="transparent")
@@ -144,6 +144,7 @@ def exibir_listagem_voos(app, user_token):
 
     # Botão de pesquisa
     ctk.CTkButton(entry_frame, text="Pesquisar", width=50, command=lambda: pesquisar(app, token)).grid(row=0, column=2, padx=10, pady=5)
+    ctk.CTkButton(entry_frame, text="Reload", width=50, command=lambda: exibir_lista_voos(scrollbar, voos, app, token)).grid(row=0, column=3, padx=1, pady=5)
     
     # Exibindo a lista de voos
     global voos

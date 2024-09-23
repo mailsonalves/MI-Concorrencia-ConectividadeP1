@@ -28,8 +28,9 @@ def login():
 # Função para exibir a tela de login
 def open_login_screen():
     # Limpa a tela atual
-    for widget in app.winfo_children():
-        widget.destroy()
+    if app.winfo_exists():
+        for widget in app.winfo_children():
+            widget.destroy()
 
     # Frame para centralizar o conteúdo
     frame = ctk.CTkFrame(app, fg_color="transparent")
