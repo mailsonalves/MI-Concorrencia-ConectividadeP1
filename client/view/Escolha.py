@@ -3,7 +3,7 @@ from view.Confirmar_reserva import tela_confirmacao_reserva
 import tkinter.messagebox as messagebox
 
 # Função de pesquisa de voos
-def pesquisar(app):
+def pesquisar(app, token):
     from cliente_main import client
 
     origem = entry_origem.get()
@@ -14,9 +14,18 @@ def pesquisar(app):
     entry_destino.delete(0, ctk.END)
 
     lista_voos = client.selecionar_voo(origem, destino)
-
+    
+    if lista_voos != False :
+        for widget in scrollbar.winfo_children():
+            widget.destroy()
+        exibir_lista_voos(scrollbar, lista_voos, app, token)
+    else:
+        for widget in scrollbar.winfo_children():
+            widget.destroy()
+        # Mensagem caso não haja passagens
+        ctk.CTkLabel(scrollbar, text="Voo não encontrado", font=("Arial", 20, "bold"), text_color="red").pack(pady=20)
     # Atualiza a interface com os resultados da pesquisa
-    exibir_lista_voos(scrollbar, lista_voos, app)
+    #exibir_lista_voos(scrollbar, lista_voos, app, token)
 
 def radioButton_event(selected_assento):
     global select_voo
@@ -132,9 +141,13 @@ def exibir_listagem_voos(app, user_token):
     voltar_btn.grid(row=0, column=0, columnspan=2, pady=10, padx=5)
 
     # Botão de pesquisa
-    ctk.CTkButton(entry_frame, text="Pesquisar", width=50, command=lambda: pesquisar(app)).grid(row=0, column=2, padx=10, pady=5)
+    ctk.CTkButton(entry_frame, text="Pesquisar", width=50, command=lambda: pesquisar(app, token)).grid(row=0, column=2, padx=10, pady=5)
     
     # Exibindo a lista de voos
     global voos
     voos = client.lista_de_voos()
-    exibir_lista_voos(scrollbar, voos, app, token)
+    if voos:
+            exibir_lista_voos(scrollbar, voos, app, token)
+    else:
+        # Mensagem caso não haja passagens
+        ctk.CTkLabel(scrollbar, text="Não foi possivel achar voos", font=("Arial", 20, "bold"), text_color="red").pack(pady=20)
