@@ -20,11 +20,11 @@ def cadastro(app):
     from cliente_main import client
     username = entry_username.get()
     password = entry_password.get()
-    
     confirmar_password = entry_password_confirm.get()
     if (password == confirmar_password) and ((password != '') and (confirmar_password != '')):
-       client._cadastro(username, password)
-       voltar(app)
+       client.cadastro(username, password)
+       print("cadastrado")
+       #voltar(app)
             
     else:
         label_result.configure(text="As senhas não coincidem ", text_color="red")

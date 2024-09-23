@@ -142,17 +142,20 @@ class Servidor:
                                     Retorna True se o usuário for criado com sucesso, 
                                     ou False se o username já estiver em uso.
                                 """
-                                for user in users.values():
-                                    if user_info.get("username") == user.username:
-                                        conn.sendall(pickle.dumps(False))
+                                with lock:  # Garantindo que apenas uma thread manipula a lista de usuários por vez
+                                    # Verifica se o usuário já existe
+                                    user_exists = any(user_info.get("username") == user.username for user in users.values())
+
+                                    if user_exists:
+                                        conn.sendall(pickle.dumps(False))  # Usuário já existe, retorna False
                                     else:
-                                        with lock:
-                                            new_user = User(
-                                                user_info.get("username"),
-                                                user_info.get("password"),
-                                            )
-                                            users[new_user.id_user] = new_user
-                                            conn.sendall(pickle.dumps(True))
+                                        # Adiciona novo usuário
+                                        new_user = User(
+                                            user_info.get("password_user"),user_info.get("username")
+                                        )
+                                        users[new_user.id_user] = new_user
+                                        conn.sendall(pickle.dumps(True))  # Cadastro bem-sucedido, retorna True
+
 
                             elif action_code == 201:
                                 """
