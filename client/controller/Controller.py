@@ -176,10 +176,13 @@ class Cliente:
         None
         """
         all_trechos = self.__request(201, "")
-        for voo in all_trechos[origem]:
-            if voo.destino == destino:
-                return voo
-        else:
+        try:
+            for voo in all_trechos[origem]:
+                if voo.destino == destino:
+                    return voo
+            else:
+                return False
+        except KeyError:
             return False
         #self.view.mostrar_voos(all_trechos[origem])
         #id_voo = self.view.solicitar_id_voo()

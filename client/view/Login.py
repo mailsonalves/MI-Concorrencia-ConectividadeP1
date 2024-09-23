@@ -1,6 +1,7 @@
 import customtkinter as ctk 
 from view.Menu import open_menu
 from view.Cadastro import open_cadastro_screen
+import time
 
 # Configurando o tema e a aparência
 ctk.set_appearance_mode("System")  # Modos: "System", "Dark", "Light"
@@ -11,18 +12,21 @@ def login():
     from cliente_main import client
     username = entry_username.get()
     password = entry_password.get()
-    auth = client.authenticate( username,password)
-    # Lógica de autenticação simples (pode ser adaptada para validação real)
-    if auth != False:
-        label_result.configure(text="Login bem-sucedido!", text_color="green")
-        user_token = auth.get("token")
-        open_menu(app,user_token)  # Chama a função para abrir o dashboard
+    if((username != '') and {password != ''}):
+        auth = client.authenticate( username,password)
+        # Lógica de autenticação simples (pode ser adaptada para validação real)
+        if auth != False:
+            label_result.configure(text="Login bem-sucedido!", text_color="green")
+            user_token = auth.get("token")
+            open_menu(app,user_token)  # Chama a função para abrir o dashboard
+        else:
+            label_result.configure(text="Usuário ou senha incorretos", text_color="red")
     else:
-        label_result.configure(text="Usuário ou senha incorretos", text_color="red")
+        label_result.configure(text="Preencha os campos", text_color="red")
+        
 
 # Função para exibir a tela de login
 def open_login_screen():
- 
     # Limpa a tela atual
     for widget in app.winfo_children():
         widget.destroy()
@@ -40,6 +44,7 @@ def open_login_screen():
     # Campo de entrada para usuário
     entry_username = ctk.CTkEntry(frame, placeholder_text="Usuário", width=300)
     entry_username.pack(pady=10)
+    
 
     # Campo de entrada para senha
     entry_password = ctk.CTkEntry(frame, placeholder_text="Senha", show="*", width=300)

@@ -52,7 +52,6 @@ def exibir_lista_voos(frame, lista_voos, app):
     else:
         exibir_detalhes_voo(frame, lista_voos[0], app)
 
-# Função para iniciar a interface gráfica
 def exibir_consulta_voos(app, user_token):
     global scrollbar, token
     token = user_token
@@ -73,8 +72,9 @@ def exibir_consulta_voos(app, user_token):
     frame_bottom.pack(side="bottom", fill="x")
 
     # Botão de Voltar
-    voltar_btn = ctk.CTkButton(frame_bottom, text="Voltar",  command=lambda: voltar(app, token))
+    voltar_btn = ctk.CTkButton(frame_bottom, text="Voltar", command=lambda: voltar(app, token))
     voltar_btn.grid(row=0, column=0, columnspan=2, pady=10, padx=5)
+    
     # Título
     ctk.CTkLabel(frame, text="Suas Passagens", font=("Arial", 20)).pack(pady=5)
 
@@ -83,5 +83,9 @@ def exibir_consulta_voos(app, user_token):
     voos = client.lista_de_voos()
     user = client.getUser(token)
     voos_user = user.listar_passsagens(user.passagens, voos)
-    print(voos_user)
-    exibir_lista_voos(scrollbar, voos_user, app)
+    
+    if voos_user:
+        exibir_lista_voos(scrollbar, voos_user, app)
+    else:
+        # Mensagem caso não haja passagens
+        ctk.CTkLabel(scrollbar, text="Você ainda não possui passagens.", font=("Arial", 20, "bold"), text_color="red").pack(pady=20)
