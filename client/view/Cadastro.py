@@ -22,8 +22,12 @@ def cadastro(app):
     password = entry_password.get()
     confirmar_password = entry_password_confirm.get()
     if (password == confirmar_password) and ((password != '') and (confirmar_password != '')):
-       client.cadastro(username, password)
-       print("cadastrado")
+        if (client.cadastro(username, password) == True):
+            label_result.configure(text="Usuário cadastrado", text_color="green")
+        else:
+            label_result.configure(text="Usuário já existe", text_color="red")
+            
+
        #voltar(app)
             
     else:
