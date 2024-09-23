@@ -65,14 +65,16 @@ class Cliente:
         self._port = port
         self._host = host
         self._s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.view = View()
+        #self.view = View()
 
     def start_client(self):
+        from view.Login import open_login_screen
+
         """
         Inicia a conexão com o servidor e exibe o menu principal.
         """
         self._s.connect((self._host, self._port))
-        self._menu()
+        open_login_screen()
 
     def __request(self, typeOperation, data):
         """
@@ -104,7 +106,7 @@ class Cliente:
             self.view.mostrar_mensagem("Erro ao desserializar os dados recebidos.")
             return None
 
-    def _cadastro(self):
+    def _cadastro(self, username, password):
         """
         Solicita ao usuário um nome de usuário e senha para registro.
 
@@ -112,18 +114,17 @@ class Cliente:
         --------
         None
         """
-        while True:
-            username, password = self.view.solicitar_username_senha()
-            new_user = self.__request(
-                101, {"username": username, "password_user": password}
-            )
-            if new_user:
-                self.view.mostrar_mensagem("Usuário cadastrado.")
-                break
-            else:
-                self.view.mostrar_mensagem("Usuário já existe!")
-
-    def _login(self):
+        new_user = self.__request(
+            101, {"username": username, "password_user": password}
+        )
+        if new_user:
+            print("Usuário cadastrado.")
+            return True
+        else:
+            print("Usuário já existe!")
+            return False
+   
+    def authenticate(self,username,password):
         """
         Solicita ao usuário suas credenciais e realiza o login.
 
@@ -132,22 +133,37 @@ class Cliente:
         Union[dict, bool]
             Retorna os dados do usuário e token em caso de sucesso, ou False em caso de falha.
         """
-        username, password = self.view.solicitar_username_senha()
+        #username, password = self.view.solicitar_username_senha()
         response = self.__request(
             100, {"username": username, "password_user": password}
         )
-        user = response.get("user")
 
-        if response:
-            self.view.mostrar_mensagem(f"\nBem-vindo, {user.name}!\n")
+        if response != False:
+            user = response.get("user")
+            print(f"\nBem-vindo, {user.name}!\n")
             return response
         else:
-            self.view.mostrar_mensagem(
-                "Login falhou. Verifique suas credenciais e tente novamente."
-            )
+            
+            print("Login falhou. Verifique suas credenciais e tente novamente.")
+            
             return False
 
-    def _selecionar_voo(self, user: User):
+    def lista_de_voos(self):
+        all_trechos = self.__request(201, "")  # all_trechos é um dicionário cujos valores são listas
+
+        # Inicializando uma lista para armazenar todos os valores combinados
+        combined_list = []
+
+        # Iterando sobre os valores de all_trechos e adicionando todos à lista combinada
+        for trechos in all_trechos.values():
+            combined_list.extend(trechos)
+
+        return combined_list
+
+        
+        
+    
+    def selecionar_voo(self, origem, destino):
         """
         Permite que o usuário selecione um voo disponível.
 
@@ -161,13 +177,16 @@ class Cliente:
         None
         """
         all_trechos = self.__request(201, "")
-        origem, destino = self.view.solicitar_origem_destino(all_trechos)
+        for voo in all_trechos[origem]:
+            if voo.destino == destino:
+                return voo
+        else:
+            return False
+        #self.view.mostrar_voos(all_trechos[origem])
+        #id_voo = self.view.solicitar_id_voo()
+        #self._confirmar_compra(user, all_trechos[origem], id_voo)
 
-        self.view.mostrar_voos(all_trechos[origem])
-        id_voo = self.view.solicitar_id_voo()
-        self._confirmar_compra(user, all_trechos[origem], id_voo)
-
-    def _confirmar_compra(self, user, voos, id_voo_selecionado):
+    def confirmar_compra(self, user, voos, id_voo_selecionado, assento):
         """
         Confirma a compra de uma passagem para um voo específico.
 
@@ -186,20 +205,19 @@ class Cliente:
         """
         for voo in voos:
             if voo.id == id_voo_selecionado:
-                escolha_assento, cpf = self.view.solicitar_assento_e_cpf(voo)
-                passagem = user.comprar_passagem(voo, escolha_assento, cpf)
+                passagem = user.comprar_passagem(voo, assento, cpf = '5465654654')
                 if passagem and passagem != "Ocupado":
-                    self.view.mostrar_mensagem(
+                    print(
                         f"Compra confirmada:\nID do Voo: {passagem.id_voo}\nID do Passageiro: {passagem.id_passageiro}\nCPF: {passagem.cpf}\nAssento: {passagem.assento}"
                     )
                     self.__request(202, passagem)
-                    return
+                    return passagem
                 elif passagem == "Ocupado":
-                    self.view.mostrar_mensagem("Assento indisponível")
-                    return
+                    print("Assento indisponível")
+                    return False
                 else:
-                    self.view.mostrar_mensagem("Voo lotado")
-                    return
+                    print("Voo lotado")
+                    return "Ocupado"
 
     def _imprimir_passagens_user(self, user):
         """
@@ -229,7 +247,7 @@ class Cliente:
             opcao = self.view.mostrar_menu_principal()
             token_user = 0
             if opcao == "1":
-                response = self._login()
+                response = self.authenticate()
                 user = response.get("user")
                 token = response.get("token")
                 token_user = token
@@ -255,3 +273,28 @@ class Cliente:
                 
                 self._s.close()
                 break
+    
+    def getUser(self, token):
+        return self.__request(102, token)
+        
+    
+    def imprimir_passagem(self, passagens_de_voos: list, voos: dict):
+        for passagem in passagens_de_voos:
+            for voo in voos.values():
+                for voo_user in voo:
+                    if voo_user.id == passagem.id_voo:
+                        print("-" * 60)
+                        print(f'ID: {passagem.id_voo}')
+                        print(f'CPF: {passagem.cpf}')
+                        print(f'Origem: {voo_user.origem}')
+                        print(f'Destino: {voo_user.destino}')
+                        print(f'Assento: {passagem.assento}')
+                        print("-" * 60)
+                        
+    def get_voo(self, id_voo):
+        voos = self.__request(201, "")
+        for voo in voos.values():
+                for voo_list in voo:
+                    if voo_list.id == id_voo:
+                        return voo_list
+        return False
