@@ -75,7 +75,7 @@ class User():
             Retorna False se o voo não estiver disponível.
         """
         if voo.disponibilidade:
-            if not voo.vagas[assento]:
+            if not voo.vagas[assento]                           :
                 passagem = Passagem(voo.id, self.id_user, cpf)
                 passagem.assento = assento
                 return passagem

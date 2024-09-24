@@ -182,9 +182,7 @@ class Cliente:
                 return False
         except KeyError:
             return False
-        #self.view.mostrar_voos(all_trechos[origem])
-        #id_voo = self.view.solicitar_id_voo()
-        #self._confirmar_compra(user, all_trechos[origem], id_voo)
+
 
     def confirmar_compra(self, user, voos, id_voo_selecionado, assento):
         """
@@ -256,61 +254,11 @@ class Cliente:
         all_trechos = self.__request(201, "")
         self.view.imprimir_passagem(user.passagens, all_trechos)
 
-    def _menu(self):
-        """
-        Exibe o menu principal e processa as opções escolhidas pelo usuário.
-
-        Retorna:
-        --------
-        None
-        """
-        while True:
-            opcao = self.view.mostrar_menu_principal()
-            token_user = 0
-            if opcao == "1":
-                response = self.authenticate()
-                user = response.get("user")
-                token = response.get("token")
-                token_user = token
-                if user:
-                    while True:
-                        self.view.mostrar_mensagem(
-                            "[1] Comprar Passagem\n[2] Consultar Passagem\n[3] Voltar ao Menu"
-                        )
-                        opcao = input("Selecione uma opção: \n")
-                        if opcao == "1":
-                            self._selecionar_voo(user)
-                        elif opcao == "2":
-                            user = self.__request(102, token)
-                            self._imprimir_passagens_user(user)
-                        elif opcao == "3":
-                            break
-
-            elif opcao == "2":
-                self._cadastro()
-
-            elif opcao == "3":
-                self.view.mostrar_mensagem("Encerrando conexão...")
-                
-                self._s.close()
-                break
     
     def getUser(self, token):
         return self.__request(102, token)
         
     
-    def imprimir_passagem(self, passagens_de_voos: list, voos: dict):
-        for passagem in passagens_de_voos:
-            for voo in voos.values():
-                for voo_user in voo:
-                    if voo_user.id == passagem.id_voo:
-                        print("-" * 60)
-                        print(f'ID: {passagem.id_voo}')
-                        print(f'CPF: {passagem.cpf}')
-                        print(f'Origem: {voo_user.origem}')
-                        print(f'Destino: {voo_user.destino}')
-                        print(f'Assento: {passagem.assento}')
-                        print("-" * 60)
                         
     def get_voo(self, id_voo):
         voos = self.__request(201, "")

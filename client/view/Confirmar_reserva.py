@@ -7,8 +7,8 @@ def voltar(app, token):
         widget.destroy()
     exibir_listagem_voos(app, token)
 
-def confirmar_reserva(app, token):
-    messagebox.showinfo("Confirmação de Reserva", "Compra realizada com sucesso!")
+def confirmar_reserva(app, token, passagem):
+    messagebox.showinfo("Confirmação de Reserva", f"Compra realizada com sucesso!\n Numero da passagem: {passagem.id}")
     print("Reserva confirmada!")
     voltar(app, token)
 
@@ -46,7 +46,7 @@ def tela_confirmacao_reserva(app, passagem, token):
     ctk.CTkLabel(frame, text_color="black", text=f"Preço Total: R$ {voo.preco}", font=("Arial", 14)).grid(row=5, column=0, sticky="w", padx=20, pady=5)
 
     # Botões de ação
-    button_confirmar = ctk.CTkButton(frame, text="Confirmar Reserva", command=lambda: confirmar_reserva(app, token), width=300)
+    button_confirmar = ctk.CTkButton(frame, text="Confirmar Reserva", command=lambda: confirmar_reserva(app, token, passagem), width=300)
     button_confirmar.grid(row=6, column=0, columnspan=2, pady=2, padx=20)
 
     button_cancelar = ctk.CTkButton(frame, text="Cancelar Compra", command=lambda: cancelar_compra(app, token, passagem), width=300, fg_color="red", hover_color="#470a0a")

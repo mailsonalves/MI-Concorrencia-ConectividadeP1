@@ -46,8 +46,10 @@ O sistema foi desenvolvido pensando em oferecer uma jornada de compra de passage
 - O usuário deve conseguir cancelar uma passagem comprada por ele.
 
 A estrutura do sistema é baseada na troca de mensagens entre um cliente da rede, que é um terminal que se conecta ao servidor, e o servidor, que é onde todas as informações sobre voos e clientes ficam registradas. A arquitetura do sistema é mostrada abaixo na Figura 1, que mostra os componentes da rede. Pode-se observar a centralidade do servidor e a troca simultânea de mensagens com vários clientes.
-
-Figura 1. Modelo cliente servidor
+<p align="center">Figura 1. Modelo cliente servidor</p>
+<div align="center">
+<img src="https://github.com/user-attachments/assets/1b75e366-fb33-4d17-944d-69745d72f3b7" width="700">
+</div>
 
 Sendo assim, cada cliente da rede oferece uma interface de acesso que se comunica ao servidor e retorna para o usuário as informações solicitadas para o usuário do sistema. Essa comunicação entre cliente e servidor é detalhada na figura 2, que mostra um diagrama de sequência da troca de mensagens entre ambos no sistema.
 
