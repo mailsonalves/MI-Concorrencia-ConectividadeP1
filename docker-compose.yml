@@ -1,0 +1,19 @@
+
+services:
+  servidor:
+    build: ./server
+    ports:
+      - "5000:5000"  # Mapeia a porta do servidor para a máquina host
+    networks:
+      - rede_teste
+
+  cliente:
+    build: ./client
+    depends_on:
+      - servidor  # Garante que o servidor estará disponível antes de iniciar o cliente
+    networks:
+      - rede_teste
+
+networks:
+  rede_teste:
+    driver: bridge

@@ -1,0 +1,16 @@
+# Usando a imagem oficial do Python
+FROM python:3.9-slim
+
+# Definir o diretório de trabalho dentro do container
+WORKDIR /app
+
+
+COPY cliente_main.py ./
+
+
+
+# Expor a porta, se necessário (dependendo da implementação do cliente)
+EXPOSE 5001
+
+# Definir o comando para rodar o cliente
+CMD ["python", "cliente_main.py"]
