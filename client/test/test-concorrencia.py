@@ -25,13 +25,14 @@ def simular_cliente(server_host, server_port, client_id):
             login_response = s.recv(4096)
             login_resposta = pickle.loads(login_response)
             
+            user = login_resposta["user"]
+            
             if not login_resposta or not login_resposta.get("token"):
-                log_message = f"Cliente {client_id}: Falha no login. Latência: {login_latency:.2f} ns"
+                log_message = f"Cliente {user.name}: Falha no login. Latência: {login_latency:.2f} ns"
                 log.append(log_message)
                 return "\n".join(log)
 
-            user = login_resposta["user"]
-            log_message = f"Cliente {client_id}: Login bem-sucedido para o usuário {user.name}. Latência de login: {login_latency:.2f} ns"
+            log_message = f"Cliente {user.name}: Login bem-sucedido para o usuário {user.name}. Latência de login: {login_latency:.2f} ns"
             log.append(log_message)
 
             # 2. Solicita a lista de voos disponíveis (ação de código 201)
@@ -78,10 +79,15 @@ def simular_cliente(server_host, server_port, client_id):
     # Escreve os logs em um arquivo
     with open("client_logs.txt", "a") as log_file:
         log_file.write("\n".join(log) + "\n")
+        log_file.write("\n")
+        
 
     return "\n".join(log)
 
 def testar_concorrencia(server_host, server_port, num_clientes):
+    resultados = []
+    inicio = time.time()  # Marca o início do teste
+
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_clientes) as executor:
         futures = [
             executor.submit(simular_cliente, server_host, server_port, client_id + 1)
@@ -90,14 +96,26 @@ def testar_concorrencia(server_host, server_port, num_clientes):
         
         # Exibe os resultados conforme os clientes finalizam as operações
         for future in concurrent.futures.as_completed(futures):
-            print(future.result())
+            try:
+                resultado = future.result()  # Obtém o resultado da execução do cliente
+                resultados.append(resultado)
+                print(f"Cliente finalizado com sucesso: {resultado}")
+            except Exception as e:
+                print(f"Erro no cliente: {e}")
+
+    fim = time.time()  # Marca o fim do teste
+    duracao = fim - inicio
+
+    # Exibe resumo do teste
+    print(f"\nTeste de concorrência finalizado com {num_clientes} clientes.")
+    print(f"Tempo total: {duracao:.2f} segundos")
 
 # Parâmetros do servidor
 server_host = "127.0.0.1"  
 server_port = 65432        
 
 # Número de clientes simultâneos
-num_clientes = 10
+num_clientes = 9
 
 # Iniciar teste de concorrência
 testar_concorrencia(server_host, server_port, num_clientes)
