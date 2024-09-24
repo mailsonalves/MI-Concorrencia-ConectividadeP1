@@ -45,7 +45,6 @@ def selecionar_voo(app, voo_id, token):
     else:
         passagem = client.confirmar_compra(user, voos, voo_id, select_voo)
         if passagem != False and passagem != 'Ocupado':
-            print(f'esolha: {passagem}')
             tela_confirmacao_reserva(app, passagem, token)
         else:
             messagebox.showerror("Erro", "Assento ocupado, Tente Outro!")
@@ -94,7 +93,12 @@ def exibir_lista_voos(frame, lista_voos, app, token):
             if disponibilidades == True:
                 exibir_detalhes_voo(frame, voo, app, token)
     else:
-        exibir_detalhes_voo(frame, lista_voos, app, token)
+        disponibilidades = not all(lista_voos.vagas.values())
+        if disponibilidades == True:
+                exibir_detalhes_voo(frame, lista_voos, app, token)
+        else:
+            ctk.CTkLabel(scrollbar, text="Esse voo já alcançou a lotação máxima", font=("Arial", 20, "bold"), text_color="red").pack(pady=20)
+                
         
 def voltar(app, token):
     from view.Menu import open_menu
