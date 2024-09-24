@@ -90,21 +90,22 @@ class Servidor:
                                 """
                                 username = user_info.get("username")
                                 password_user = user_info.get("password_user")
-                                for user in users.values():
-                                    if (
-                                        user.username == username
-                                        and user.password == password_user
-                                    ):
-                                        session_token = secrets.token_hex(16)
-                                        sessions_activate[session_token] = user.id_user
-                                        conn.sendall(
-                                            pickle.dumps(
-                                                {"token": session_token, "user": user}
+                                with lock:
+                                    for user in users.values():
+                                        if (
+                                            user.username == username
+                                            and user.password == password_user
+                                        ):
+                                            session_token = secrets.token_hex(16)
+                                            sessions_activate[session_token] = user.id_user
+                                            conn.sendall(
+                                                pickle.dumps(
+                                                    {"token": session_token, "user": user}
+                                                )
                                             )
-                                        )
-                                        break
-                                else:
-                                    conn.sendall(pickle.dumps(False))
+                                            break
+                                    else:
+                                        conn.sendall(pickle.dumps(False))
 
                             elif action_code == 102:
                                 """
@@ -117,19 +118,22 @@ class Servidor:
                                     Retorna o objeto do usuário associado ao token.
                                 """
                                 token = user_info
-                                if token in sessions_activate.keys():
-                                    user = users[sessions_activate[token]]
-                                    conn.sendall(pickle.dumps(user))
-                                else:
-                                    conn.sendall(pickle.dumps(False))
+                                with lock:
+                                    if token in sessions_activate.keys():
+                                        user = users[sessions_activate[token]]
+                                        conn.sendall(pickle.dumps(user))
+                                    else:
+                                        conn.sendall(pickle.dumps(False))
                                
                                
                             elif action_code == 103:
+                
                                 token = user_info
-                                if token in sessions_activate.keys():
-                                    del sessions_activate[token]
-                                    conn.sendall(pickle.dumps(user))
-                                    conn.close()
+                                with lock:
+                                    if token in sessions_activate.keys():
+                                        del sessions_activate[token]
+                                        conn.sendall(pickle.dumps(user))
+                                        conn.close()
 
                                 
                             elif action_code == 101:
@@ -215,8 +219,7 @@ class Servidor:
                                     Retorna True se a compra for realizada com sucesso,
                                     ou False se o assento já estiver ocupado.
                                 """
-                                with lock:
-                                  for voo in voos.values():
+                                for voo in voos.values():
                                     for num in range(len(voo)):
                                         # Verifica se o voo do usuário é o mesmo
                                         if voo[num].id == user_info.id_voo:
@@ -225,14 +228,15 @@ class Servidor:
                                                 # Procura pela passagem no histórico do usuário
                                                 for passagem in users[user_info.id_passageiro].passagens:
                                                     if user_info.id == passagem.id:
-                                                        # Libera o assento e remove a passagem
-                                                        voo[num].vagas[user_info.assento] = False
-                                                        users[user_info.id_passageiro].passagens.remove(passagem)
+                                                        with lock:
+                                                            # Libera o assento e remove a passagem
+                                                            voo[num].vagas[user_info.assento] = False
+                                                            users[user_info.id_passageiro].passagens.remove(passagem)
 
-                                                        # Envia confirmação de sucesso para o cliente
-                                                        conn.sendall(pickle.dumps(True))
-                                                        print(f"Deletada, Cliente -> [{self._host}] : [{self._port}]")
-                                                        break
+                                                            # Envia confirmação de sucesso para o cliente
+                                                            conn.sendall(pickle.dumps(True))
+                                                            print(f"Deletada, Cliente -> [{self._host}] : [{self._port}]")
+                                                            break
                                                 break
                                             else:
                                                 # Assento já está ocupado (não pode remover)
