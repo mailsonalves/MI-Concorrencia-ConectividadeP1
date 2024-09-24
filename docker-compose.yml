@@ -13,6 +13,10 @@ services:
       - servidor  # Garante que o servidor estará disponível antes de iniciar o cliente
     networks:
       - rede_teste
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
 
 networks:
   rede_teste:
