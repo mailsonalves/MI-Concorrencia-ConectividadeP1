@@ -2,6 +2,9 @@ import customtkinter as ctk
 from view.Confirmar_reserva import tela_confirmacao_reserva
 import tkinter.messagebox as messagebox
 
+
+def formatar_string(text: str):
+    return text.title().strip()
 # Função de pesquisa de voos
 def pesquisar(app, token):
     from cliente_main import client
@@ -9,6 +12,8 @@ def pesquisar(app, token):
     origem = entry_origem.get()
     destino = entry_destino.get()
 
+    origem  = formatar_string(origem)
+    destino  = formatar_string(destino)
     # Limpa os campos de entrada após a pesquisa
     entry_origem.delete(0, ctk.END)
     entry_destino.delete(0, ctk.END)
