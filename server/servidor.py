@@ -47,7 +47,7 @@ class Servidor:
         print(f"Servidor ouvindo em {self._host}:{self._port}")
         try:
             with concurrent.futures.ThreadPoolExecutor(
-                max_workers=10
+                max_workers=2
             ) as executor:  # Limita a quantidade de threads
                 while True:
                     conn, client = self._s.accept()
