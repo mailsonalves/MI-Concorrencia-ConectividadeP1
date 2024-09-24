@@ -48,18 +48,26 @@ O sistema foi desenvolvido pensando em oferecer uma jornada de compra de passage
 A estrutura do sistema é baseada na troca de mensagens entre um cliente da rede, que é um terminal que se conecta ao servidor, e o servidor, que é onde todas as informações sobre voos e clientes ficam registradas. A arquitetura do sistema é mostrada abaixo na Figura 1, que mostra os componentes da rede. Pode-se observar a centralidade do servidor e a troca simultânea de mensagens com vários clientes.
 <p align="center">Figura 1. Modelo cliente servidor</p>
 <div align="center">
+<img src="https://github.com/user-attachments/assets/85130da9-ab8f-4f51-a39f-a08963f62abc" width="400">
+</div>
+
+<br>
+Sendo assim, cada cliente da rede oferece uma interface de acesso que se comunica ao servidor e retorna para o usuário as informações solicitadas para o usuário do sistema. Essa comunicação entre cliente e servidor é detalhada na figura 2, que mostra um diagrama de sequência da troca de mensagens entre ambos no sistema.
+<br>
+<p align="center">Figura 2. Diagrama de sequência do sistema</p>
+<div align="center">
 <img src="https://github.com/user-attachments/assets/1b75e366-fb33-4d17-944d-69745d72f3b7" width="700">
 </div>
 
-Sendo assim, cada cliente da rede oferece uma interface de acesso que se comunica ao servidor e retorna para o usuário as informações solicitadas para o usuário do sistema. Essa comunicação entre cliente e servidor é detalhada na figura 2, que mostra um diagrama de sequência da troca de mensagens entre ambos no sistema.
-
-Para o desenvolvimento do sistema foi implementado a comunicação entre cliente e servidor usando TCP/IP através do Socket. O Socket foi utilizado para facilitar o acesso à camada de transporte do TCP/IP realizando a comunicação de dois pontos em uma rede de computadores, nesse caso, entre cliente e servidor. Inicialmente, foi testada a comunicação direta entre um servidor e um cliente, posteriormente, foram testados múltiplos acessos simultâneos ao servidor. Após os testes, percebeu-se a necessidade de gerenciar a concorrência de acessos ao servidor, e para isso foi necessário a utilização de Threads. As Threads foram usadas para que vários clientes se comuniquem com servidor simultaneamente, deixando o servidor sempre em “escuta” de clientes que possam se conectar e fazer requisições para ele através da porta de rede especificada. Para gerenciar as Threads e evitar o uso demasiado de recursos computacionais com a criação de n Threads para n clientes, foi utilizado o pool de Threads para gerenciá-las.  O pool de threads permite processar várias requisições ao mesmo tempo, atribuindo uma Thread disponível do pool para cada requisição do cliente ao servidor. 
+<br>
+Para o desenvolvimento do sistema foi implementado a comunicação entre cliente e servidor usando TCP/IP através do Socket. O Socket foi utilizado para facilitar o acesso à camada de transporte do TCP/IP realizando a comunicação de dois pontos em uma rede de computadores, nesse caso, entre cliente e servidor. Inicialmente, foi testada a comunicação direta entre um servidor e um cliente, posteriormente, foram testados múltiplos acessos simultâneos ao servidor. Após os testes, percebeu-se a necessidade de gerenciar a concorrência de acessos ao servidor, e para isso foi necessário a utilização de Threads. As Threads foram usadas para que vários clientes se comuniquem com servidor simultaneamente, deixando o servidor sempre em “escuta” de clientes que possam se conectar e fazer requisições para ele através da porta de rede especificada. Para gerenciar as Threads e evitar o uso demasiado de recursos computacionais com a criação de n Threads para n clientes, foi utilizado o pool de Threads para gerenciá-las.  O pool de Threads permite processar várias requisições ao mesmo tempo, atribuindo uma Thread disponível do pool para cada requisição do cliente ao servidor. Outro recurso que auxiliou gerenciamento das Threads concorrentes foi o mutex implementado utilizando a linguagem Pyhon.
 
 A arquitetura de software utilizada foi o padrão MVC(Model View Controller) visando organizar as classes de acesso aos dados, as interfaces e as classes intermediárias. Para os dados de voos e usuários do sistema foi criado uma função que serializa os dados utilizando a biblitoeca pickle em um arquivo do tipo JSON e fica disponível no servidor. Ao serem enviados em bytes via Socket, são desserializados e consumidos pelos clientes da rede. Ao sofrer alteração, como no momento de registro de compra de passagem, por exemplo, os dados são enviados e serializados novamente no servidor, ficando disponível para o demais clientes.
  
 Para cada operação de cliente no servidor foi criado uma convenção de código, onde, na troca de mensagem é passado junto com um dado. Esse código leva a informação para uma função que faz uma operação específica no servidor. Dessa forma, foi criada uma API básica no servidor permitindo que o mesmo lide com as requisições específicas dos clientes da rede.
 A Tabela 1 abaixo mostra os códigos e suas respectivas operações.
 <p align="center">Tabela 1. Funções usadas no servidor e seus respectivos códigos</p>
+
 
 
 | Código de Ação | Descrição                                                                                   | Resposta                                                                                                                                          |
@@ -76,10 +84,10 @@ A Tabela 1 abaixo mostra os códigos e suas respectivas operações.
 
 
 
-Uma função para teste de concorrência também foi implementada. 
+Uma função para teste de concorrência também foi implementada visando automatizar o teste com multiplos ao servidor e o limite do pool de Threads. 
 
 # 4. Resultados 
-Fica evidente que o sistema desenvolvido atendeu aos requisitos especificados, conseguindo lidar com o tráfego e concorrência durante a compra de passagens em diversos terminais simultâneos. Foi testado a compra para o mesmo assento do voo por mais de um cliente, e como esperado, o sistema tratou o erro da falta de vaga retornando corretamente a informação para os demais clientes da rede. Ademais, a experiência de compra do usuário atendeu aos requisitos e pode ser implementada para qualquer empresa aérea.
+Ficou evidente que o sistema desenvolvido atendeu aos requisitos especificados, conseguindo lidar com o tráfego e concorrência durante a compra de passagens em diversos terminais simultâneos. Foi testado a compra para o mesmo assento do voo por mais de um cliente, e como esperado, o sistema tratou o erro da falta de vaga retornando corretamente a informação para os demais clientes da rede. Ademais, a experiência de compra do usuário atendeu aos requisitos e pode ser implementada para qualquer empresa aérea.
  
 O sistema de venda de passagens aéreas Vende-Pass foi desenvolvido com a proposta de solucionar o problema da possível ineficiência logística e operacional das empresas aéreas brasileiras, além de oferecer uma jornada de compra de passagens satisfatória para os seus clientes. Estes objetivos propostos se tornaram viáveis graças ao uso de tecnologias de rede como o Socket, utilizados durante o seu desenvolvimento. Além disso, a utilização de recursos e arquiteturas de software usando a linguagem de programação Python também foram cruciais para resolução do problema.
 
@@ -90,3 +98,9 @@ Portanto, é possível concluir que após desenvolvido e testado, o sistema Vend
 O aprendizado adquirido durante o processo de desenvolvimento do sistema abrange desde a área de redes de computadores até a Engenharia de Software e é fundamental para a formação dos discentes envolvidos.
 
 # 6. Referências
+
+TANENBAUM, A. S.; WETHERALL, D. Redes de Computadores. 5. ed. São Paulo: Pearson, 2011.
+
+KUROSE, J. F.; ROSS, K. W. Redes de Computadores e a Internet: Uma Abordagem Top-Down. 6. ed. São Paulo: Pearson, 2013.
+
+FOROUZAN, B. A. Comunicação de Dados e Redes de Computadores. 5. ed. Porto Alegre: McGraw-Hill, 2013.
