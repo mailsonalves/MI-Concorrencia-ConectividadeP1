@@ -59,8 +59,20 @@ A arquitetura de software utilizada foi o padrão MVC(Model View Controller) vis
  
 Para cada operação de cliente no servidor foi criado uma convenção de código, onde, na troca de mensagem é passado junto com um dado. Esse código leva a informação para uma função que faz uma operação específica no servidor. Dessa forma, foi criada uma API básica no servidor permitindo que o mesmo lide com as requisições específicas dos clientes da rede.
 A Tabela 1 abaixo mostra os códigos e suas respectivas operações.
+<p align="center">Tabela 1. Funções usadas no servidor e seus respectivos códigos</p>
 
-Tabela 1. Funções usadas no servidor e seus respectivos códigos
+
+| Código de Ação | Descrição                                                                                   | Resposta                                                                                                                                          |
+|----------------|---------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| 100            | Autentica o usuário com base no username e senha fornecidos.                             | Envia um token de sessão se a autenticação for bem-sucedida. Caso contrário, retorna `False`.                                                  |
+| 101            | Registra um novo usuário no sistema.                                                       | Retorna `True` se o usuário for criado com sucesso, ou `False` se o username já estiver em uso.                                               |
+| 102            | Verifica a sessão ativa de um usuário com base no token.                                  | Retorna o objeto do usuário associado ao token ou `False` se o token não for válido.                                                           |
+| 103            | Desativa a sessão ativa de um usuário com base no token.                                  | Remove a sessão ativa e retorna o usuário associado ao token ou `False` se o token não for válido.                                             |
+| 201            | Envia a lista de voos disponíveis.                                                        | Retorna o dicionário contendo os voos disponíveis.                                                                                              |
+| 202            | Realiza a compra de uma passagem para um voo específico.                                   | Retorna `True` se a compra for realizada com sucesso, ou `False` se o assento já estiver ocupado.                                              |
+| 203            | Cancela a compra de uma passagem para um voo específico.                                   | Retorna `True` se a passagem for removida com sucesso, ou `False` se o assento já estiver ocupado ou a passagem não foi encontrada.            |
+
+
 
 
 
