@@ -6,12 +6,11 @@ WORKDIR /app
 
 
 
-COPY  main.py ./
-
+COPY . /app/.
 
 
 # Expor a porta que o servidor irá utilizar
-EXPOSE 5000
+EXPOSE 65432
 
 # Definir o comando para rodar o servidor
 CMD ["python", "main.py"]

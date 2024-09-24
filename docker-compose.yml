@@ -3,7 +3,7 @@ services:
   servidor:
     build: ./server
     ports:
-      - "5000:5000"  # Mapeia a porta do servidor para a máquina host
+      - "65432:65432"  # Mapeia a porta do servidor para a máquina host
     networks:
       - rede_teste
 
