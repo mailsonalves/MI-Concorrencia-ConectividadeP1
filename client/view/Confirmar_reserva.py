@@ -1,10 +1,11 @@
 import customtkinter as ctk
 import tkinter.messagebox as messagebox
 
-def voltar(app, token):
+def voltar(app, token, passagem):
     from view.Escolha import exibir_listagem_voos
     for widget in app.winfo_children():
         widget.destroy()
+    cancelar_compra(app, token, passagem)
     exibir_listagem_voos(app, token)
 
 def confirmar_reserva(app, token, passagem):
@@ -53,7 +54,7 @@ def tela_confirmacao_reserva(app, passagem, token):
     button_cancelar.grid(row=7, column=0, columnspan=2, pady=2, padx=20)
 
     # Botão de Voltar
-    voltar_btn = ctk.CTkButton(frame, text="Voltar", command=lambda: voltar(app, token))
+    voltar_btn = ctk.CTkButton(frame, text="Voltar", command=lambda: voltar(app, token, passagem))
     voltar_btn.grid(row=8, column=0, columnspan=2, pady=10, padx=20)
 
     global voos
