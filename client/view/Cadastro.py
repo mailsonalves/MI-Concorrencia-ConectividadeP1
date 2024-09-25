@@ -1,5 +1,4 @@
 import customtkinter as ctk 
-from view.Menu import open_menu
 
 
 # Configurando o tema e a aparência
@@ -22,12 +21,12 @@ def cadastro(app):
     password = entry_password.get()
     name = entry_name.get()
     confirmar_password = entry_password_confirm.get()
+    #Verificar se a confirmação de senhas estão iguais
     if (password == confirmar_password) and ((password != '') and (confirmar_password != '')):
         if (client.cadastro(username, password, name) == True):
             label_result.configure(text="Usuário cadastrado", text_color="green")
         else:
             label_result.configure(text="Usuário já existe", text_color="red")
-       #voltar(app)
     else:
         label_result.configure(text="As senhas não coincidem ", text_color="red")
         

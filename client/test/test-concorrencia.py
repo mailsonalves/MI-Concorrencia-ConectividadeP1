@@ -42,11 +42,11 @@ def simular_cliente(server_host, server_port, client_id):
             
             if not login_resposta or not login_resposta.get("token"):
                 # Loga a falha de login e encerra
-                log_message = f"Cliente {client_id}: Falha no login. Latência: {login_latency:.2f} ns"
+                log_message = f"Cliente {user.name}: Falha no login. Latência: {login_latency:.2f} ns"
                 log.append(log_message)
                 return "\n".join(log)
 
-            log_message = f"Cliente {client_id}: Login bem-sucedido para o usuário {user.name}. Latência de login: {login_latency:.2f} ns"
+            log_message = f"Cliente {user.name}: Login bem-sucedido para o usuário {user.name}. Latência de login: {login_latency:.2f} ns"
             log.append(log_message)
 
             # 2. Solicita a lista de voos disponíveis (ação de código 201)
@@ -81,10 +81,10 @@ def simular_cliente(server_host, server_port, client_id):
             compra_resposta = pickle.loads(compra_response)
 
             if compra_resposta:
-                log_message = f"Cliente {client_id}: Compra realizada com sucesso para o voo {voo_selecionado.id}. Latência de compra: {compra_latency:.2f} ns"
+                log_message = f"Cliente {user.name}: Compra realizada com sucesso para o voo {voo_selecionado.id}. Latência de compra: {compra_latency:.2f} ns"
                 log.append(log_message)
             else:
-                log_message = f"Cliente {client_id}: Falha na compra da passagem. Latência de compra: {compra_latency:.2f} ns"
+                log_message = f"Cliente {user.name}: Falha na compra da passagem. Latência de compra: {compra_latency:.2f} ns"
                 log.append(log_message)
 
     except Exception as e:
@@ -124,7 +124,7 @@ def testar_concorrencia(server_host, server_port, num_clientes):
             barreira.wait()  # Espera até que todas as threads estejam prontas para começar
             resultado = simular_cliente(server_host, server_port, client_id)
             resultados.append(resultado)
-            print(f"Cliente finalizado com sucesso: {resultado}")
+            print(resultado)
         except Exception as e:
             print(f"Erro no cliente {client_id}: {e}")
 
