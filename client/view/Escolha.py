@@ -2,9 +2,10 @@ import customtkinter as ctk
 from view.Confirmar_reserva import tela_confirmacao_reserva
 import tkinter.messagebox as messagebox
 
-
 def formatar_string(text: str):
+    """Formata a string para título e remove espaços em branco."""
     return text.title().strip()
+
 # Função de pesquisa de voos
 def pesquisar(app, token):
     from cliente_main import client
@@ -12,110 +13,97 @@ def pesquisar(app, token):
     origem = entry_origem.get()
     destino = entry_destino.get()
 
-    origem  = formatar_string(origem)
-    destino  = formatar_string(destino)
+    origem = formatar_string(origem)
+    destino = formatar_string(destino)
+    
     # Limpa os campos de entrada após a pesquisa
     entry_origem.delete(0, ctk.END)
     entry_destino.delete(0, ctk.END)
 
     lista_voos = client.selecionar_voo(origem, destino)
     
-    if lista_voos != False :
-        for widget in scrollbar.winfo_children():
-            widget.destroy()
+    # Atualiza a interface com os resultados da pesquisa
+    for widget in scrollbar.winfo_children():
+        widget.destroy()  # Limpa resultados anteriores
+    
+    if lista_voos:
         exibir_lista_voos(scrollbar, lista_voos, app, token)
     else:
-        for widget in scrollbar.winfo_children():
-            widget.destroy()
         # Mensagem caso não haja passagens
         ctk.CTkLabel(scrollbar, text="Voo não encontrado", font=("Arial", 20, "bold"), text_color="red").pack(pady=20)
-    # Atualiza a interface com os resultados da pesquisa
-    #exibir_lista_voos(scrollbar, lista_voos, app, token)
 
 def radioButton_event(selected_assento):
+    """Atualiza a seleção do assento."""
     global select_voo
     select_voo = selected_assento.get()
-    return
-
 
 # Função para selecionar voo e confirmar a compra
 def selecionar_voo(app, voo_id, token):
     from cliente_main import client
 
     user = client.getUser(token)
-    #print(select_voo)
-    if select_voo == " ":
+    
+    if select_voo.strip() == "":
         # Exibe mensagem de erro se nenhum assento for selecionado
         messagebox.showerror("Erro", "Por favor, selecione um assento.")
     else:
         passagem = client.confirmar_compra(user, voos, voo_id, select_voo)
-        if passagem != False and passagem != 'Ocupado':
+        if passagem and passagem != 'Ocupado':
             tela_confirmacao_reserva(app, passagem, token)
         else:
-            messagebox.showerror("Erro", "Assento ocupado, Tente Outro!")
-            
-        
+            messagebox.showerror("Erro", "Assento ocupado, tente outro!")
 
 # Função para exibir detalhes de cada voo
 def exibir_detalhes_voo(frame, voo, app, token):
-    
-
-    # Criação de um frame para o voo
+    """Exibe os detalhes do voo e opções de assento."""
     voo_frame = ctk.CTkFrame(frame, fg_color="white")
     voo_frame.pack(fill="x", padx=10, pady=10, expand=True)
 
     # Exibe os detalhes do voo
     ctk.CTkLabel(voo_frame, text_color="black", text=f"Voo {voo.id}", font=("Arial", 14, "bold")).grid(row=0, column=0, sticky="w", padx=10, pady=2)
-    ctk.CTkLabel(voo_frame, text_color="black",text=f"{voo.origem} para {voo.destino}", font=("Arial", 12)).grid(row=1, column=0, sticky="w", padx=10, pady=1)
-    ctk.CTkLabel(voo_frame, text_color="black",text=f"Preço: R$ {voo.preco}", font=("Arial", 12)).grid(row=2, column=0, sticky="w", padx=10, pady=1)
+    ctk.CTkLabel(voo_frame, text_color="black", text=f"{voo.origem} para {voo.destino}", font=("Arial", 12)).grid(row=1, column=0, sticky="w", padx=10, pady=1)
+    ctk.CTkLabel(voo_frame, text_color="black", text=f"Preço: R$ {voo.preco}", font=("Arial", 12)).grid(row=2, column=0, sticky="w", padx=10, pady=1)
 
     # Seção de seleção de assento
-    ctk.CTkLabel(voo_frame, text_color="black",text="Selecione o assento:", font=("Arial", 12)).grid(row=3, column=0, sticky="w", padx=10, pady=1)
+    ctk.CTkLabel(voo_frame, text_color="black", text="Selecione o assento:", font=("Arial", 12)).grid(row=3, column=0, sticky="w", padx=10, pady=1)
     selected_assento = ctk.StringVar(value=" ")
 
-    
     # Botões de seleção de assento
-    radio_a1 = ctk.CTkRadioButton(voo_frame, text=list(voo.vagas.keys())[0], text_color="black", fg_color="#0377fc", value=list(voo.vagas.keys())[0], variable=selected_assento, command=lambda: radioButton_event(selected_assento))
-    radio_a1.grid(row=4, column=0, padx=10, pady=1, sticky="w")
-
-    # RadioButton para o segundo assento
-    radio_a2 = ctk.CTkRadioButton(voo_frame, text=list(voo.vagas.keys())[1], text_color="black", fg_color="#0377fc", value=list(voo.vagas.keys())[1], variable=selected_assento, command=lambda: radioButton_event(selected_assento))
-    radio_a2.grid(row=5, column=0, padx=10, pady=1, sticky="w")
+    for idx, vaga in enumerate(voo.vagas.keys()):
+        ctk.CTkRadioButton(voo_frame, text=vaga, text_color="black", fg_color="#0377fc", value=vaga, variable=selected_assento,
+                           command=lambda: radioButton_event(selected_assento)).grid(row=4 + idx, column=0, padx=10, pady=1, sticky="w")
 
     # Botão de Selecionar
-    ctk.CTkButton(voo_frame, text="Selecionar", command=lambda: selecionar_voo(app, voo.id, token), width=200).grid(row=6 + len(voo.vagas.keys()), column=0, padx=10, pady=5)
+    ctk.CTkButton(voo_frame, text="Selecionar", command=lambda: selecionar_voo(app, voo.id, token), width=200).grid(row=5 + len(voo.vagas.keys()), column=0, padx=10, pady=5)
 
 # Função para exibir a lista de voos
 def exibir_lista_voos(frame, lista_voos, app, token):
+    """Exibe a lista de voos disponíveis."""
     # Limpa os itens anteriores
     for widget in frame.winfo_children():
         widget.destroy()
 
-    # Exibe cada voo da lista
     if isinstance(lista_voos, list):
         for voo in lista_voos:
-            disponibilidades = not all(voo.vagas.values())
-            if disponibilidades == True:
+            if not all(voo.vagas.values()):  # Verifica se há assentos disponíveis
                 exibir_detalhes_voo(frame, voo, app, token)
     else:
-        disponibilidades = not all(lista_voos.vagas.values())
-        if disponibilidades == True:
-                exibir_detalhes_voo(frame, lista_voos, app, token)
+        if not all(lista_voos.vagas.values()):  # Caso único de voo
+            exibir_detalhes_voo(frame, lista_voos, app, token)
         else:
             ctk.CTkLabel(scrollbar, text="Esse voo já alcançou a lotação máxima", font=("Arial", 20, "bold"), text_color="red").pack(pady=20)
-                
-        
+
 def voltar(app, token):
+    """Define o comportamento do botão 'Voltar'."""
     from view.Menu import open_menu
     
-    # Função que define o comportamento do botão voltar
     for widget in app.winfo_children():
         widget.destroy()
-    # Aqui você pode adicionar o código que irá exibir a tela anterior, por exemplo:
     open_menu(app, token)
-    
+
 # Função para iniciar a interface gráfica
 def exibir_listagem_voos(app, user_token):
+    """Configura e exibe a tela de pesquisa de voos."""
     global entry_origem, entry_destino, scrollbar, token
     token = user_token
     from cliente_main import client
@@ -159,7 +147,7 @@ def exibir_listagem_voos(app, user_token):
     global voos
     voos = client.lista_de_voos()
     if voos:
-            exibir_lista_voos(scrollbar, voos, app, token)
+        exibir_lista_voos(scrollbar, voos, app, token)
     else:
         # Mensagem caso não haja passagens
-        ctk.CTkLabel(scrollbar, text="Não foi possivel achar voos", font=("Arial", 20, "bold"), text_color="red").pack(pady=20)
+        ctk.CTkLabel(scrollbar, text="Não foi possível achar voos", font=("Arial", 20, "bold"), text_color="red").pack(pady=20)
