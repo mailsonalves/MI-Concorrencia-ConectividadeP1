@@ -56,7 +56,7 @@ Sendo assim, cada cliente da rede oferece uma interface de acesso que se comunic
 <br>
 <p align="center">Figura 2. Diagrama de sequência do sistema</p>
 <div align="center">
-<img src="https://github.com/user-attachments/assets/1b75e366-fb33-4d17-944d-69745d72f3b7" width="700">
+<img src="https://github.com/user-attachments/assets/0bcb14f4-5307-48d3-9390-83b64fe79112" width="700">
 </div>
 
 <br>
@@ -84,7 +84,8 @@ A Tabela 1 abaixo mostra os códigos e suas respectivas operações.
 
 
 
-Uma função para teste de concorrência também foi implementada visando automatizar o teste com multiplos ao servidor e o limite do pool de Threads. 
+Uma função para teste de concorrência foi implementada para automatizar a interação de múltiplos clientes com o servidor, utilizando Threads. O teste simula a compra de passagens, onde vários clientes competem pelo mesmo assento. Para garantir a sincronização das Threads, foi utilizada uma barreira que permite que todas sejam disparadas simultaneamente. Os resultados são armazenados em um arquivo .txt, possibilitando a verificação se algum cliente conseguiu comprar uma passagem que não deveria. Além disso, o teste mede a latência da comunicação entre cliente e servidor, empregando a biblioteca time do Python
+
 
 # 4. Resultados 
 Ficou evidente que o sistema desenvolvido atendeu aos requisitos especificados, conseguindo lidar com o tráfego e concorrência durante a compra de passagens em diversos terminais simultâneos. Foi testado a compra para o mesmo assento do voo por mais de um cliente, e como esperado, o sistema tratou o erro da falta de vaga retornando corretamente a informação para os demais clientes da rede. Ademais, a experiência de compra do usuário atendeu aos requisitos e pode ser implementada para qualquer empresa aérea.
