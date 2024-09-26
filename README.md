@@ -84,7 +84,13 @@ A Tabela 1 abaixo mostra os códigos e suas respectivas operações.
 
 
 
-Uma função para teste de concorrência foi implementada para automatizar a interação de múltiplos clientes com o servidor, utilizando Threads. O teste simula a compra de passagens, onde vários clientes competem pelo mesmo assento. Para garantir a sincronização das Threads, foi utilizada uma barreira que permite que todas sejam disparadas simultaneamente. Os resultados são armazenados em um arquivo .txt, possibilitando a verificação se algum cliente conseguiu comprar uma passagem que não deveria. Além disso, o teste mede a latência da comunicação entre cliente e servidor, empregando a biblioteca time do Python
+Uma função para teste de concorrência foi implementada para automatizar a interação de múltiplos clientes com o servidor, utilizando Threads. O teste simula a compra de passagens, onde vários clientes competem pelo mesmo assento. Para garantir a sincronização das Threads, foi utilizada uma barreira que permite que todas sejam disparadas simultaneamente. Os resultados são armazenados em um arquivo .txt, possibilitando a verificação se algum cliente conseguiu comprar uma passagem que não deveria. Além disso, o teste mede a latência da comunicação entre cliente e servidor, empregando a biblioteca time do Python.
+
+A utilização da interface gráfica foi utilizada para trazer uma boa experiência do usuário ao utilizar o sistema, através dela o usuário consegue ter uma apresentação visual das informações facilitando o processo de compra das passagens. As Figuras 1 e 2 mostram as telas de Cadastro de Login de usuário no sistema, respectivamente.
+<div align="center">
+<img src="https://github.com/user-attachments/assets/f2f3cead-1db0-4b5f-8b17-852a61384ebf" width="700">
+</div>
+
 
 
 # 4. Resultados 
