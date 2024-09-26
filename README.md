@@ -87,11 +87,35 @@ A Tabela 1 abaixo mostra os códigos e suas respectivas operações.
 Uma função para teste de concorrência foi implementada para automatizar a interação de múltiplos clientes com o servidor, utilizando Threads. O teste simula a compra de passagens, onde vários clientes competem pelo mesmo assento. Para garantir a sincronização das Threads, foi utilizada uma barreira que permite que todas sejam disparadas simultaneamente. Os resultados são armazenados em um arquivo .txt, possibilitando a verificação se algum cliente conseguiu comprar uma passagem que não deveria. Além disso, o teste mede a latência da comunicação entre cliente e servidor, empregando a biblioteca time do Python.
 
 A utilização da interface gráfica foi utilizada para trazer uma boa experiência do usuário ao utilizar o sistema, através dela o usuário consegue ter uma apresentação visual das informações facilitando o processo de compra das passagens. As Figuras 1 e 2 mostram as telas de Cadastro de Login de usuário no sistema, respectivamente.
+
+<p align="center">Figura 3. Tela de Cadastro do Sistema</p>
+<div align="center">
+<img src="https://github.com/user-attachments/assets/e68b1227-2437-4fe8-92bb-6c7896798a6b" width="700">
+</div>
+<p align="center">Figura 3. Tela de Login do Sistema</p>
 <div align="center">
 <img src="https://github.com/user-attachments/assets/f2f3cead-1db0-4b5f-8b17-852a61384ebf" width="700">
 </div>
 
+A tela inicial, após o usuário estar autenticado no Sistema, apresenta a visualização de todos os voos disponíveis e as opções de compra da passagem além de contar com a opção de pesquisa de voo.
+A opção de pesquisa foi implementada pensando em mostrar apenas os voos disponíveis ao digitar a cidade origem e destino do voo.
+A malha aérea, que compreende as cidades envolvidas nas rotas aéreas, foi implementada como mostra a Tabela 2 abaixo. Cada aeroporto da malha áerea da possui possibilidades de destinos diferentes e totalizam 9 cidades. Os dados foram usados de forma representativa.
+<p align="center">Tabela 2. Malha aérea usada para gerar os voos no Sistema</p>
+<div align="center">
+  
+| Cidade          | Voos disponíveis para                                  |
+|-----------------|--------------------------------------------------------|
+| Brasília        | São Paulo, Rio de Janeiro, Salvador, Belo Horizonte, Curitiba |
+| São Paulo       | Rio de Janeiro, Brasília, Salvador, Belo Horizonte, Porto Alegre, Curitiba, Recife |
+| Rio de Janeiro  | São Paulo, Brasília, Salvador, Belo Horizonte, Porto Alegre, Recife |
+| Salvador        | Brasília, São Paulo, Rio de Janeiro, Recife, Fortaleza, Belo Horizonte |
+| Belo Horizonte  | São Paulo, Rio de Janeiro, Brasília, Salvador, Curitiba |
+| Curitiba        | São Paulo, Belo Horizonte, Porto Alegre, Brasília       |
+| Porto Alegre    | São Paulo, Rio de Janeiro, Curitiba, Brasília           |
+| Recife          | Salvador, Fortaleza, São Paulo, Rio de Janeiro, Brasília |
+| Fortaleza       | Salvador, Recife, Brasília                              |
 
+</div>
 
 # 4. Resultados 
 Ficou evidente que o sistema desenvolvido atendeu aos requisitos especificados, conseguindo lidar com o tráfego e concorrência durante a compra de passagens em diversos terminais simultâneos. Foi testado a compra para o mesmo assento do voo por mais de um cliente, e como esperado, o sistema tratou o erro da falta de vaga retornando corretamente a informação para os demais clientes da rede. Ademais, a experiência de compra do usuário atendeu aos requisitos e pode ser implementada para qualquer empresa aérea.
