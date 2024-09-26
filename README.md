@@ -48,7 +48,7 @@ O sistema foi desenvolvido pensando em oferecer uma jornada de compra de passage
 A estrutura do sistema é baseada na troca de mensagens entre um cliente da rede, que é um terminal que se conecta ao servidor, e o servidor, que é onde todas as informações sobre voos e clientes ficam registradas. A arquitetura do sistema é mostrada abaixo na Figura 1, que mostra os componentes da rede. Pode-se observar a centralidade do servidor e a troca simultânea de mensagens com vários clientes.
 <p align="center">Figura 1. Modelo cliente servidor</p>
 <div align="center">
-<img src="https://github.com/user-attachments/assets/85130da9-ab8f-4f51-a39f-a08963f62abc" width="400">
+<img src="https://github.com/user-attachments/assets/0ace0654-1519-4c63-a575-73bcef4fc1e8" width="700">
 </div>
 
 <br>
