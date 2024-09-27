@@ -86,13 +86,13 @@ A Tabela 1 abaixo mostra os códigos e suas respectivas operações.
 
 Uma função para teste de concorrência foi implementada para automatizar a interação de múltiplos clientes com o servidor, utilizando Threads. O teste simula a compra de passagens, onde vários clientes competem pelo mesmo assento. Para garantir a sincronização das Threads, foi utilizada uma barreira que permite que todas sejam disparadas simultaneamente. Os resultados são armazenados em um arquivo .txt, possibilitando a verificação se algum cliente conseguiu comprar uma passagem que não deveria. Além disso, o teste mede a latência da comunicação entre cliente e servidor, empregando a biblioteca time do Python.
 
-A utilização da interface gráfica foi utilizada para trazer uma boa experiência do usuário ao utilizar o sistema, através dela o usuário consegue ter uma apresentação visual das informações facilitando o processo de compra das passagens. As Figuras 1 e 2 mostram as telas de Cadastro de Login de usuário no sistema, respectivamente.
+A interface gráfica foi pensada para trazer uma boa experiência do usuário ao utilizar o sistema, através dela o usuário consegue ter uma apresentação visual das informações facilitando o processo de compra das passagens. As Figuras 1 e 2 mostram as telas de Cadastro de Login de usuário no sistema, respectivamente.
 
 <p align="center">Figura 3. Tela de Cadastro do Sistema</p>
 <div align="center">
 <img src="https://github.com/user-attachments/assets/e68b1227-2437-4fe8-92bb-6c7896798a6b" width="700">
 </div>
-<p align="center">Figura 3. Tela de Login do Sistema</p>
+<p align="center">Figura 4. Tela de Login do Sistema</p>
 <div align="center">
 <img src="https://github.com/user-attachments/assets/f2f3cead-1db0-4b5f-8b17-852a61384ebf" width="700">
 </div>
@@ -116,6 +116,27 @@ A malha aérea, que compreende as cidades envolvidas nas rotas aéreas, foi impl
 | Fortaleza       | Salvador, Recife, Brasília                              |
 
 </div>
+
+As Figuras 5 e 6 mostram a listagem e confirmação de compra de passagem no sistema.
+
+<p align="center">Figura 5. Tela de Pesquisa de Passagem no Sistema</p>
+<div align="center">
+<img src="https://github.com/user-attachments/assets/6f6f004a-a0a6-4f35-9209-97b6fc83afef" width="700">
+</div>
+
+<br>
+<p align="center">Figura 5. Tela de Confirmação de compra de passagem</p>
+<div align="center">
+<img src="https://github.com/user-attachments/assets/42258b37-2b58-4f19-9a21-60d2771a109d" width="700">
+</div>
+
+O processo de concorrência pelas informações do servidor pelos clientes também refletiu no desenvolvimento das telas. A figura 6 mostra a mensagem que é exibida em caso do usuário tentar comprar um assento que já foi comprado por outro usuário. O tratamento dessa prioridade de compra, assim como as outras requisções foi feita através da técnica de exclusão mútua utilizando mutex. No python ela foi implementada utilizando o with lock que protege regiões críticas dentro do das operações realizadas no servidor como é caso da opreção com código 202 que realiza a compra de uma passagem selecionada pelo usuário. 
+
+
+Por fim, foi utilizado progamação orientado a objetos para manipulação de dados no servidor, facilitando a construção envio e recuperação de informações. As classes utilizadas no servidor foram:
+- Passagem, que armazena os dados de uma passagem comprada por um cliente nos atributos: Id do voo, Id do passageiro e Assento
+- User, que armazena os dados do usuário os atributos: nome,cpf, user, senha e passagens.
+- Voo, que armazena as informações referentes a um voo os atributos: origem, destino, assento e vagas.
 
 # 4. Resultados 
 Ficou evidente que o sistema desenvolvido atendeu aos requisitos especificados, conseguindo lidar com o tráfego e concorrência durante a compra de passagens em diversos terminais simultâneos. Foi testado a compra para o mesmo assento do voo por mais de um cliente, e como esperado, o sistema tratou o erro da falta de vaga retornando corretamente a informação para os demais clientes da rede. Ademais, a experiência de compra do usuário atendeu aos requisitos e pode ser implementada para qualquer empresa aérea.
