@@ -96,10 +96,11 @@ A interface gráfica foi pensada para trazer uma boa experiência do usuário ao
 <div align="center">
 <img src="https://github.com/user-attachments/assets/f2f3cead-1db0-4b5f-8b17-852a61384ebf" width="700">
 </div>
-
+<br>
 A tela inicial, após o usuário estar autenticado no Sistema, apresenta a visualização de todos os voos disponíveis e as opções de compra da passagem além de contar com a opção de pesquisa de voo.
 A opção de pesquisa foi implementada pensando em mostrar apenas os voos disponíveis ao digitar a cidade origem e destino do voo.
 A malha aérea, que compreende as cidades envolvidas nas rotas aéreas, foi implementada como mostra a Tabela 2 abaixo. Cada aeroporto da malha áerea da possui possibilidades de destinos diferentes e totalizam 9 cidades. Os dados foram usados de forma representativa.
+<br>
 <p align="center">Tabela 2. Malha aérea usada para gerar os voos no Sistema</p>
 <div align="center">
   
@@ -129,12 +130,12 @@ As Figuras 5 e 6 mostram a listagem e confirmação de compra de passagem no sis
 <div align="center">
 <img src="https://github.com/user-attachments/assets/42258b37-2b58-4f19-9a21-60d2771a109d" width="700">
 </div>
-
-O processo de concorrência pelas informações do servidor pelos clientes também refletiu no desenvolvimento das telas. A figura 6 mostra a mensagem que é exibida em caso do usuário tentar comprar um assento que já foi comprado por outro usuário. O tratamento dessa prioridade de compra, assim como as outras requisções foi feita através da técnica de exclusão mútua utilizando mutex. No python ela foi implementada utilizando o with lock que protege regiões críticas dentro do das operações realizadas no servidor como é caso da opreção com código 202 que realiza a compra de uma passagem selecionada pelo usuário. 
+<br>
+O processo de concorrência pelas informações do servidor pelos clientes também refletiu no desenvolvimento das telas. A mensagem informando que um assento está ocupado é exibida em caso do usuário tentar comprar um assento que já foi comprado por outro usuário. O tratamento dessa prioridade de compra, assim como as outras requisições foi feita através da técnica de exclusão mútua utilizando mutex. No python ela foi implementada utilizando o with lock que protege regiões críticas dentro do das operações realizadas no servidor como é caso da opreção com código 202 que realiza a compra de uma passagem selecionada pelo usuário. 
 
 
 Por fim, foi utilizado progamação orientado a objetos para manipulação de dados no servidor, facilitando a construção envio e recuperação de informações. As classes utilizadas no servidor foram:
-- Passagem, que armazena os dados de uma passagem comprada por um cliente nos atributos: Id do voo, Id do passageiro e Assento
+- Passagem, que armazena os dados de uma passagem comprada por um cliente nos atributos: Id do voo, Id do passageiro e Assento.
 - User, que armazena os dados do usuário os atributos: nome,cpf, user, senha e passagens.
 - Voo, que armazena as informações referentes a um voo os atributos: origem, destino, assento e vagas.
 
