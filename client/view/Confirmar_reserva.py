@@ -9,7 +9,7 @@ def voltar(app, token, passagem):
     from view.Escolha import exibir_listagem_voos  # Importa a função de exibição de voos
     for widget in app.winfo_children():  # Remove todos os widgets da janela atual
         widget.destroy()
-    cancelar_compra(app, token, passagem)  # Chama a função de cancelamento (opcional, pode ser ajustada)
+    cancelar_compra(app, token, passagem, True)  # Chama a função de cancelamento (opcional, pode ser ajustada)
     exibir_listagem_voos(app, token)  # Exibe a tela de listagem de voos
 
 def confirmar_reserva(app, token, passagem):
@@ -20,7 +20,7 @@ def confirmar_reserva(app, token, passagem):
     print("Reserva confirmada!")
     voltar(app, token, passagem)  # Chama a função para retornar à listagem de voos
 
-def cancelar_compra(app, token, passagem):
+def cancelar_compra(app, token, passagem, voltar):
     """
     Função que cancela a compra de uma passagem. 
     Se o cancelamento for bem-sucedido, exibe uma mensagem de confirmação e retorna à listagem de voos.
@@ -28,11 +28,9 @@ def cancelar_compra(app, token, passagem):
     from cliente_main import client  # Importa o cliente para manipulação de dados
     voos = client.lista_de_voos()  # Obtém a lista de voos disponíveis
     remove = client.deletar_compra(voos, passagem)  # Tenta deletar a compra
-    if remove:  # Se a compra foi cancelada com sucesso
+    if remove and voltar == False:  # Se a compra foi cancelada com sucesso
         messagebox.showinfo("Cancelamento", "Compra cancelada com sucesso!")
         voltar(app, token, passagem)  # Retorna à listagem de voos
-    else:
-        print('Falha ao cancelar')  # Exibe mensagem no console em caso de falha
 
 def tela_confirmacao_reserva(app, passagem, token):
     """
@@ -66,7 +64,7 @@ def tela_confirmacao_reserva(app, passagem, token):
     button_confirmar.grid(row=6, column=0, columnspan=2, pady=2, padx=20)
 
     # Botão para cancelar a compra
-    button_cancelar = ctk.CTkButton(frame, text="Cancelar Compra", command=lambda: cancelar_compra(app, token, passagem), width=300, fg_color="red", hover_color="#470a0a")
+    button_cancelar = ctk.CTkButton(frame, text="Cancelar Compra", command=lambda: cancelar_compra(app, token, passagem, False), width=300, fg_color="red", hover_color="#470a0a")
     button_cancelar.grid(row=7, column=0, columnspan=2, pady=2, padx=20)
 
     # Botão de voltar para a listagem de voos
